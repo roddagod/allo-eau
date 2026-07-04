@@ -3,6 +3,7 @@ import { createServerClient } from '@eaupourtous/db/server';
 import { getUser } from '@eaupourtous/db/get-user';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
 import { BrandMark } from '@/components/brand/brand-mark';
+import { PublicHeader } from '@/components/public-header';
 import {
   DropletIcon,
   TruckIcon,
@@ -93,45 +94,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ===================== HEADER ===================== */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <BrandMark variant="light" size="md" />
-
-
-          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
-            <a href="#comment" className="hover:text-slate-900">Comment ça marche</a>
-            <a href="#tarifs" className="hover:text-slate-900">Tarifs officiels</a>
-            <a href="#zones" className="hover:text-slate-900">Zones desservies</a>
-            <a href="#urgence" className="hover:text-slate-900">Urgence</a>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            {user ? (
-              <Link
-                href="/commander"
-                className="inline-flex min-h-touch items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-700-700 focus-visible:outline-none"
-              >
-                Accéder à mon espace
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="hidden min-h-touch items-center justify-center rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 sm:inline-flex"
-                >
-                  Se connecter
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex min-h-touch items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-700-700 focus-visible:outline-none"
-                >
-                  Créer un compte
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      <PublicHeader />
 
       <main id="main">
         {/* ===================== HERO ===================== */}
@@ -155,14 +118,12 @@ export default async function HomePage() {
                 Commander maintenant
                 <ArrowRightIcon className="h-5 w-5" />
               </Link>
-              {!user && (
-                <Link
-                  href="/signup"
-                  className="inline-flex min-h-touch items-center justify-center rounded-lg border border-white/30 bg-transparent px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none"
-                >
-                  Créer un compte
-                </Link>
-              )}
+              <Link
+                href="/nouvelles-mesures"
+                className="inline-flex min-h-touch items-center justify-center rounded-lg border border-white/30 bg-transparent px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none"
+              >
+                Nouvelles mesures
+              </Link>
             </div>
 
             {!user && (
@@ -185,62 +146,6 @@ export default async function HomePage() {
                 <dd className="mt-1 text-xl font-bold">Incluse</dd>
               </div>
             </dl>
-          </div>
-        </section>
-
-        {/* ===================== BANDEAU MESURES EN VIGUEUR ===================== */}
-        <section className="border-b border-primary-100 bg-white">
-          <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-3">
-                <span
-                  className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-danger-soft text-danger"
-                  aria-hidden
-                >
-                  <AlertTriangleIcon className="h-4 w-4" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-danger">
-                    Mesures en vigueur depuis le 02/07/2026
-                  </p>
-                  <p className="mt-1 text-sm font-medium text-ink">
-                    Communiqué de presse N°2 du Ministère · Tarif révisé · 5 numéros verts opérationnels
-                  </p>
-                </div>
-              </div>
-              <Link
-                href="/nouvelles-mesures"
-                className="inline-flex min-h-touch shrink-0 items-center justify-center gap-2 rounded-lg border border-primary bg-white px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none"
-              >
-                Lire toutes les mesures
-                <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-            </div>
-
-            {/* Chips résumé — les 3 faits importants du communiqué N°2 */}
-            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
-              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
-                <DropletIcon className="h-5 w-5 shrink-0 text-primary" />
-                <div className="min-w-0 text-sm">
-                  <span className="font-bold text-ink">4 000 FCFA</span>
-                  <span className="ml-1 text-ink-muted">le m³, livraison incluse</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
-                <PhoneIcon className="h-5 w-5 shrink-0 text-primary" />
-                <div className="min-w-0 text-sm">
-                  <span className="font-bold text-ink">18 · 181 · 182 · 183</span>
-                  <span className="ml-1 text-ink-muted">numéros distribution</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
-                <TruckIcon className="h-5 w-5 shrink-0 text-primary" />
-                <div className="min-w-0 text-sm">
-                  <span className="font-bold text-ink">Militaires + opérateurs</span>
-                  <span className="ml-1 text-ink-muted">homologués DGE</span>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -423,7 +328,7 @@ export default async function HomePage() {
                 <li key={h.number}>
                   <a
                     href={`tel:${h.number}`}
-                    className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4 transition-colors hover:border-accent hover:bg-white/10 focus-visible:outline-none"
+                    className="flex items-center gap-4 rounded-2xl bg-white/10 p-4 transition-colors hover:bg-white/20 focus-visible:outline-none"
                   >
                     <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent text-white">
                       <PhoneIcon className="h-6 w-6" />
@@ -437,7 +342,7 @@ export default async function HomePage() {
               ))}
             </ul>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4">
+            <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl bg-white/10 p-4">
               <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-danger text-white">
                 <AlertTriangleIcon className="h-5 w-5" />
               </span>
