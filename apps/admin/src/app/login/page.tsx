@@ -1,23 +1,35 @@
+import { BrandMark } from '@/components/brand/brand-mark';
 import { LoginForm } from './login-form';
 
 export const metadata = { title: 'Connexion — Administration' };
 
 export default function LoginPage() {
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-6 py-16">
-      <header className="mb-8 text-center">
-        <p className="text-xs uppercase tracking-widest text-gabon-green">
-          Ministère de l’Accès Universel à l’Eau et à l’Énergie
-        </p>
-        <h1 className="mt-2 text-3xl font-bold">Administration</h1>
-        <p className="mt-1 text-sm text-slate-600">Plateforme Eau Libreville</p>
+    <div className="min-h-dvh bg-surface-muted">
+      <header className="border-b border-surface-border bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <BrandMark variant="light" size="md" href={null} />
+          <p className="text-xs font-medium uppercase tracking-widest text-ink-subtle">
+            Administration
+          </p>
+        </div>
       </header>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h2 className="text-lg font-semibold">Connexion</h2>
-        <p className="mt-1 text-xs text-slate-600">Accès réservé au personnel habilité.</p>
-        <LoginForm />
-      </section>
-    </main>
+      <main className="mx-auto flex max-w-md flex-col px-4 py-14 sm:px-6">
+        <div className="rounded-lg bg-white p-6 shadow-sm sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            Connexion
+          </p>
+          <h1 className="mt-2 text-2xl font-bold text-ink sm:text-3xl">
+            Accès personnel habilité
+          </h1>
+          <p className="mt-1 text-sm text-ink-muted">
+            Cet espace est réservé au personnel du Ministère et des sociétés homologuées.
+          </p>
+
+          <LoginForm />
+        </div>
+      </main>
+    </div>
   );
 }

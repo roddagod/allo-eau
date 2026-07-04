@@ -5,16 +5,16 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
 const variants: Record<Variant, string> = {
-  primary:   'bg-gabon-green text-white hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-slate-300',
-  secondary: 'bg-white text-slate-900 border border-slate-300 hover:bg-slate-50',
-  ghost:     'bg-transparent text-slate-700 hover:bg-slate-100',
-  danger:    'bg-red-600 text-white hover:bg-red-700',
+  primary:   'bg-accent text-white hover:bg-accent-700 active:bg-accent-800 disabled:bg-ink-subtle',
+  secondary: 'bg-white text-ink border border-surface-border hover:bg-surface-muted',
+  ghost:     'bg-transparent text-ink-muted hover:bg-surface-muted',
+  danger:    'bg-danger text-white hover:opacity-90',
 };
 
 const sizes: Record<Size, string> = {
   sm: 'h-9 px-3 text-sm',
-  md: 'h-11 px-4 text-base',
-  lg: 'h-14 px-6 text-lg',
+  md: 'min-h-touch px-4 text-base',
+  lg: 'h-12 px-6 text-base',
 };
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -37,9 +37,9 @@ export function Button({
       {...rest}
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center rounded-xl font-semibold transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gabon-green focus-visible:ring-offset-2',
-        'disabled:cursor-not-allowed',
+        'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors',
+        'focus-visible:outline-none focus-visible:shadow-focus',
+        'disabled:cursor-not-allowed disabled:opacity-70',
         variants[variant],
         sizes[size],
         className,

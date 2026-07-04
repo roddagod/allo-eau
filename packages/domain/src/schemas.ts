@@ -31,11 +31,16 @@ export const volumeLitersSchema = z.union([
   z.literal(1000),
 ]);
 
-// Téléphone gabonais
+// Téléphone gabonais — permet séparateurs (espaces, tirets, points, parenthèses)
+// La normalisation stricte se fait par `normalizeGabonPhone` côté server action.
 export const phoneSchema = z
   .string()
   .trim()
-  .regex(/^(\+?241)?\s?\d{7,9}$/, 'Numéro invalide (format Gabon)');
+  .transform((s) => s.replace(/[\s().-]/g, ''))
+  .refine(
+    (s) => /^(\+?241)?0?[67]\d{7}$/.test(s),
+    'Numéro invalide (format Gabon)',
+  );
 
 // Inscription client — version simplifiée (v1, sans OTP)
 export const clientSignUpSchema = z.object({

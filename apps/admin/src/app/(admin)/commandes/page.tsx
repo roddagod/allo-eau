@@ -3,6 +3,8 @@ import { createServerClient } from '@eaupourtous/db/server';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 
+export const dynamic = 'force-dynamic';
+
 type OrderRow = {
   id: string;
   reference: string;
@@ -19,38 +21,28 @@ type OrderRow = {
 };
 
 const FILTERS = {
-  all:         { label: 'Toutes', where: () => ({}) },
-  awaiting:    { label: 'À attribuer', where: (q: ReturnType<typeof buildQuery>) => q.is('company_id', null).eq('order_status', 'pending') },
-  pending:     { label: 'En attente société', where: (q: ReturnType<typeof buildQuery>) => q.not('company_id', 'is', null).eq('order_status', 'pending') },
-  accepted:    { label: 'Acceptées', where: (q: ReturnType<typeof buildQuery>) => q.eq('order_status', 'accepted') },
-  in_delivery: { label: 'En livraison', where: (q: ReturnType<typeof buildQuery>) => q.in('order_status', ['driver_assigned','driver_en_route','arrived_nearby']) },
-  delivered:   { label: 'Livrées', where: (q: ReturnType<typeof buildQuery>) => q.eq('order_status', 'delivered') },
-  incident:    { label: 'Incidents', where: (q: ReturnType<typeof buildQuery>) => q.eq('order_status', 'incident') },
-  cancelled:   { label: 'Annulées', where: (q: ReturnType<typeof buildQuery>) => q.eq('order_status', 'cancelled') },
+  all:         'Toutes',
+  awaiting:    'À attribuer',
+  pending:     'En attente société',
+  accepted:    'Acceptées',
+  in_delivery: 'En livraison',
+  delivered:   'Livrées',
+  incident:    'Incidents',
+  cancelled:   'Annulées',
 } as const;
-
 type FilterKey = keyof typeof FILTERS;
 
-function buildQuery() {
-  return null as unknown as {
-    is: (col: string, val: unknown) => ReturnType<typeof buildQuery>;
-    eq: (col: string, val: unknown) => ReturnType<typeof buildQuery>;
-    in: (col: string, val: unknown[]) => ReturnType<typeof buildQuery>;
-    not: (col: string, op: string, val: unknown) => ReturnType<typeof buildQuery>;
-  };
-}
-
-const statusBadge: Record<OrderStatus, string> = {
-  pending:         'bg-slate-100 text-slate-700',
-  accepted:        'bg-blue-100 text-blue-700',
-  refused:         'bg-red-100 text-red-700',
-  slot_confirmed:  'bg-blue-100 text-blue-700',
-  driver_assigned: 'bg-amber-100 text-amber-700',
-  driver_en_route: 'bg-amber-100 text-amber-700',
-  arrived_nearby:  'bg-amber-100 text-amber-700',
-  delivered:       'bg-emerald-100 text-emerald-700',
-  cancelled:       'bg-slate-100 text-slate-500',
-  incident:        'bg-red-100 text-red-700',
+const statusPill: Record<OrderStatus, string> = {
+  pending:         'bg-primary-50 text-primary',
+  accepted:        'bg-primary-50 text-primary',
+  refused:         'bg-danger-soft text-danger',
+  slot_confirmed:  'bg-primary-50 text-primary',
+  driver_assigned: 'bg-accent-50 text-accent-700',
+  driver_en_route: 'bg-accent-50 text-accent-700',
+  arrived_nearby:  'bg-accent-50 text-accent-700',
+  delivered:       'bg-accent text-white',
+  cancelled:       'bg-surface-muted text-ink-subtle',
+  incident:        'bg-danger-soft text-danger',
 };
 
 export default async function OrdersPage({
@@ -73,7 +65,6 @@ export default async function OrdersPage({
     .order('created_at', { ascending: false })
     .limit(100);
 
-  // Application des filtres
   if (activeFilter === 'awaiting') query = query.is('company_id', null).eq('order_status', 'pending');
   else if (activeFilter === 'pending') query = query.not('company_id', 'is', null).eq('order_status', 'pending');
   else if (activeFilter === 'accepted') query = query.eq('order_status', 'accepted');
@@ -88,35 +79,32 @@ export default async function OrdersPage({
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Commandes</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Filtrez, réassignez, suivez en direct.
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-primary">Opérations</p>
+        <h1 className="mt-1 text-2xl font-bold text-ink sm:text-3xl">Commandes</h1>
+        <p className="mt-1 text-sm text-ink-muted">Filtrez, réassignez, suivez en direct.</p>
       </header>
 
-      {/* Filtres — scroll horizontal sur mobile */}
+      {/* Filtres */}
       <nav className="mb-5 flex gap-1 overflow-x-auto pb-1">
-        {(Object.entries(FILTERS) as [FilterKey, { label: string }][]).map(([key, def]) => {
+        {(Object.entries(FILTERS) as [FilterKey, string][]).map(([key, label]) => {
           const active = key === activeFilter;
           return (
             <Link
               key={key}
               href={key === 'all' ? '/commandes' : `/commandes?filter=${key}`}
               className={
-                'whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium transition ' +
-                (active
-                  ? 'bg-slate-900 text-white'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200')
+                'whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ' +
+                (active ? 'bg-ink text-white' : 'bg-white text-ink-muted hover:bg-surface-muted')
               }
             >
-              {def.label}
+              {label}
             </Link>
           );
         })}
       </nav>
 
       {orders.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
+        <div className="rounded-lg bg-white p-10 text-center text-sm text-ink-subtle">
           Aucune commande dans cette catégorie.
         </div>
       ) : (
@@ -128,30 +116,23 @@ export default async function OrdersPage({
                 .filter(Boolean).join(' ') || '—';
               return (
                 <li key={o.id}>
-                  <Link
-                    href={`/commandes/${o.id}`}
-                    className="block rounded-2xl border border-slate-200 bg-white p-4 hover:border-gabon-green"
-                  >
+                  <Link href={`/commandes/${o.id}`} className="block rounded-lg bg-white p-4 hover:bg-surface-muted">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs uppercase tracking-widest text-slate-500">{o.reference}</p>
-                        <p className="mt-0.5 truncate font-semibold text-slate-900">
-                          {o.quantity} × {o.volume_liters} L
-                        </p>
-                        <p className="text-xs text-slate-600">{client} · {o.zones?.name ?? '—'}</p>
-                        <p className="mt-1 text-xs text-slate-500">
+                        <p className="font-mono text-xs uppercase tracking-widest text-ink-subtle">{o.reference}</p>
+                        <p className="mt-1 truncate font-semibold text-ink">{o.quantity} × {o.volume_liters} L</p>
+                        <p className="text-xs text-ink-muted">{client} · {o.zones?.name ?? '—'}</p>
+                        <p className="mt-1 text-xs text-ink-subtle">
                           {o.companies?.commercial_name ?? (
-                            <span className="text-amber-700">Attribution en cours…</span>
+                            <span className="text-primary">À attribuer</span>
                           )}
                         </p>
                       </div>
                       <div className="text-right">
-                        <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${statusBadge[o.order_status]}`}>
+                        <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${statusPill[o.order_status]}`}>
                           {ORDER_STATUS_LABELS[o.order_status]}
                         </span>
-                        <p className="mt-2 text-sm font-bold text-gabon-green">
-                          {formatFcfa(o.total_amount_fcfa)}
-                        </p>
+                        <p className="mt-2 text-sm font-bold text-primary">{formatFcfa(o.total_amount_fcfa)}</p>
                       </div>
                     </div>
                   </Link>
@@ -161,9 +142,9 @@ export default async function OrdersPage({
           </ul>
 
           {/* Tableau desktop */}
-          <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white md:block">
+          <div className="hidden overflow-hidden rounded-lg bg-white md:block">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-widest text-slate-500">
+              <thead className="bg-surface-muted text-xs uppercase tracking-widest text-ink-subtle">
                 <tr>
                   <th className="px-4 py-3">Référence</th>
                   <th className="px-4 py-3">Client</th>
@@ -174,36 +155,31 @@ export default async function OrdersPage({
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody>
                 {orders.map((o) => {
                   const client = [o.client_snapshot?.first_name, o.client_snapshot?.last_name]
                     .filter(Boolean).join(' ') || '—';
                   return (
-                    <tr key={o.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 font-mono text-xs text-slate-700">{o.reference}</td>
-                      <td className="px-4 py-3 text-slate-800">
-                        <div>{client}</div>
-                        <div className="text-xs text-slate-500">{o.quantity} × {o.volume_liters} L</div>
+                    <tr key={o.id} className="hover:bg-surface-muted">
+                      <td className="px-4 py-3 font-mono text-xs text-ink-muted">{o.reference}</td>
+                      <td className="px-4 py-3">
+                        <div className="text-ink">{client}</div>
+                        <div className="text-xs text-ink-subtle">{o.quantity} × {o.volume_liters} L</div>
                       </td>
-                      <td className="px-4 py-3 text-slate-700">{o.zones?.name ?? '—'}</td>
-                      <td className="px-4 py-3 text-slate-700">
+                      <td className="px-4 py-3 text-ink-muted">{o.zones?.name ?? '—'}</td>
+                      <td className="px-4 py-3 text-ink-muted">
                         {o.companies?.commercial_name ?? (
-                          <span className="text-amber-700">— à attribuer</span>
+                          <span className="text-primary">— à attribuer</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusBadge[o.order_status]}`}>
+                        <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusPill[o.order_status]}`}>
                           {ORDER_STATUS_LABELS[o.order_status]}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right font-semibold text-slate-900">
-                        {formatFcfa(o.total_amount_fcfa)}
-                      </td>
+                      <td className="px-4 py-3 text-right font-semibold text-ink">{formatFcfa(o.total_amount_fcfa)}</td>
                       <td className="px-4 py-3 text-right">
-                        <Link
-                          href={`/commandes/${o.id}`}
-                          className="text-sm font-semibold text-gabon-green hover:underline"
-                        >
+                        <Link href={`/commandes/${o.id}`} className="text-sm font-semibold text-primary hover:underline">
                           Ouvrir →
                         </Link>
                       </td>

@@ -18,8 +18,8 @@ const statusColors: Record<Status, string> = {
   pending_validation: 'bg-amber-100 text-amber-800',
   active:             'bg-emerald-100 text-emerald-800',
   suspended:          'bg-red-100 text-red-800',
-  rejected:           'bg-slate-100 text-slate-600',
-  deactivated:        'bg-slate-100 text-slate-500',
+  rejected:           'bg-slate-100 text-ink-muted',
+  deactivated:        'bg-slate-100 text-ink-subtle',
 };
 
 export function CompanyStatusPanel({
@@ -43,10 +43,10 @@ export function CompanyStatusPanel({
   };
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+    <section className="rounded-lg bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold text-slate-700">Statut</h2>
+          <h2 className="text-sm font-semibold text-ink-muted">Statut</h2>
           <div className="mt-2">
             <span className={`rounded-full px-3 py-1 text-sm font-medium ${statusColors[currentStatus]}`}>
               {statusLabels[currentStatus]}
@@ -55,8 +55,8 @@ export function CompanyStatusPanel({
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-slate-500">
-        Seule une société <span className="font-semibold text-slate-700">active</span> peut recevoir des commandes.
+      <p className="mt-4 text-xs text-ink-subtle">
+        Seule une société <span className="font-semibold text-ink-muted">active</span> peut recevoir des commandes.
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
@@ -105,7 +105,7 @@ export function CompanyStatusPanel({
         )}
       </div>
 
-      {message && <p className="mt-3 text-sm text-red-600">{message}</p>}
+      {message && <p className="mt-3 text-sm text-danger">{message}</p>}
     </section>
   );
 }

@@ -24,7 +24,7 @@ export async function reassignOrderAction(
 
   const { data, error } = await supabase.rpc('dispatch_order', {
     p_order_id: orderId,
-    p_forced_company_id: forcedCompanyId,
+    p_forced_company_id: forcedCompanyId ?? undefined,
     p_actor: user.id,
   });
 

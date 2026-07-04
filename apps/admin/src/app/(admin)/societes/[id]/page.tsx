@@ -56,23 +56,23 @@ export default async function CompanyDetailPage({
   return (
     <div>
       <header className="mb-6">
-        <Link href="/societes" className="text-sm text-slate-600 hover:text-gabon-green">
+        <Link href="/societes" className="text-sm text-ink-muted hover:text-primary">
           ← Toutes les sociétés
         </Link>
         <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{company.commercial_name}</h1>
         {company.legal_name && (
-          <p className="mt-1 text-sm text-slate-600">{company.legal_name}</p>
+          <p className="mt-1 text-sm text-ink-muted">{company.legal_name}</p>
         )}
       </header>
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Colonne infos */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 lg:col-span-1">
-          <h2 className="text-sm font-semibold text-slate-700">Informations</h2>
+        <section className="rounded-lg bg-white p-5 lg:col-span-1">
+          <h2 className="text-sm font-semibold text-ink-muted">Informations</h2>
           <dl className="mt-4 space-y-3 text-sm">
             <div>
-              <dt className="text-xs uppercase tracking-widest text-slate-500">Type d’opérateur</dt>
-              <dd className="mt-0.5 text-slate-800">
+              <dt className="text-xs uppercase tracking-widest text-ink-subtle">Type d’opérateur</dt>
+              <dd className="mt-0.5 text-ink">
                 {company.operator_type === 'private' && 'Opérateur privé'}
                 {company.operator_type === 'military' && 'Opérateur militaire'}
                 {company.operator_type === 'municipal' && 'Opérateur public'}
@@ -80,37 +80,37 @@ export default async function CompanyDetailPage({
             </div>
             {company.rccm && (
               <div>
-                <dt className="text-xs uppercase tracking-widest text-slate-500">RCCM / Identifiant</dt>
-                <dd className="mt-0.5 text-slate-800">{company.rccm}</dd>
+                <dt className="text-xs uppercase tracking-widest text-ink-subtle">RCCM / Identifiant</dt>
+                <dd className="mt-0.5 text-ink">{company.rccm}</dd>
               </div>
             )}
             {company.manager_name && (
               <div>
-                <dt className="text-xs uppercase tracking-widest text-slate-500">Responsable</dt>
-                <dd className="mt-0.5 text-slate-800">{company.manager_name}</dd>
+                <dt className="text-xs uppercase tracking-widest text-ink-subtle">Responsable</dt>
+                <dd className="mt-0.5 text-ink">{company.manager_name}</dd>
               </div>
             )}
             {company.phone && (
               <div>
-                <dt className="text-xs uppercase tracking-widest text-slate-500">Téléphone</dt>
-                <dd className="mt-0.5 text-slate-800">{company.phone}</dd>
+                <dt className="text-xs uppercase tracking-widest text-ink-subtle">Téléphone</dt>
+                <dd className="mt-0.5 text-ink">{company.phone}</dd>
               </div>
             )}
             {company.email && (
               <div>
-                <dt className="text-xs uppercase tracking-widest text-slate-500">Email</dt>
-                <dd className="mt-0.5 break-all text-slate-800">{company.email}</dd>
+                <dt className="text-xs uppercase tracking-widest text-ink-subtle">Email</dt>
+                <dd className="mt-0.5 break-all text-ink">{company.email}</dd>
               </div>
             )}
             {company.address && (
               <div>
-                <dt className="text-xs uppercase tracking-widest text-slate-500">Adresse</dt>
-                <dd className="mt-0.5 whitespace-pre-wrap text-slate-800">{company.address}</dd>
+                <dt className="text-xs uppercase tracking-widest text-ink-subtle">Adresse</dt>
+                <dd className="mt-0.5 whitespace-pre-wrap text-ink">{company.address}</dd>
               </div>
             )}
-            <div className="border-t border-slate-100 pt-3">
-              <dt className="text-xs uppercase tracking-widest text-slate-500">Commandes traitées</dt>
-              <dd className="mt-0.5 text-slate-800">{company.orders_count ?? 0}</dd>
+            <div className="border-t border-surface-border pt-3">
+              <dt className="text-xs uppercase tracking-widest text-ink-subtle">Commandes traitées</dt>
+              <dd className="mt-0.5 text-ink">{company.orders_count ?? 0}</dd>
             </div>
           </dl>
         </section>

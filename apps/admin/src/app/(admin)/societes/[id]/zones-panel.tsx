@@ -61,11 +61,11 @@ export function CompanyZonesPanel({
   }, [selected, assignedIds]);
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5">
+    <section className="rounded-lg bg-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold text-slate-700">Zones couvertes</h2>
-          <p className="mt-1 text-xs text-slate-500">
+          <h2 className="text-sm font-semibold text-ink-muted">Zones couvertes</h2>
+          <p className="mt-1 text-xs text-ink-subtle">
             {selected.size} zone{selected.size !== 1 ? 's' : ''} sélectionnée{selected.size !== 1 ? 's' : ''}
           </p>
         </div>
@@ -86,12 +86,12 @@ export function CompanyZonesPanel({
           return (
             <div key={sector}>
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-ink-subtle">
                   {sector}
                 </h3>
                 <button
                   type="button"
-                  className="text-xs font-medium text-gabon-green hover:underline"
+                  className="text-xs font-medium text-primary hover:underline"
                   onClick={() => (allSelected ? clearAllSector(sector) : selectAllSector(sector))}
                 >
                   {allSelected ? 'Tout retirer' : 'Tout sélectionner'}
@@ -106,15 +106,15 @@ export function CompanyZonesPanel({
                       className={
                         'flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ' +
                         (active
-                          ? 'border-gabon-green bg-gabon-green/5'
-                          : 'border-slate-200 bg-white hover:border-slate-300')
+                          ? 'border-primary bg-primary/5'
+                          : 'border-surface-border bg-white hover:border-surface-border')
                       }
                     >
                       <input
                         type="checkbox"
                         checked={active}
                         onChange={() => toggle(z.id)}
-                        className="h-4 w-4 accent-gabon-green"
+                        className="h-4 w-4 accent-primary"
                       />
                       <span className="truncate">{z.name}</span>
                     </label>
@@ -127,7 +127,7 @@ export function CompanyZonesPanel({
       </div>
 
       {message && (
-        <p className={`mt-4 text-sm ${message.includes('enregistrée') ? 'text-emerald-700' : 'text-red-600'}`}>
+        <p className={`mt-4 text-sm ${message.includes('enregistrée') ? 'text-accent-700' : 'text-danger'}`}>
           {message}
         </p>
       )}

@@ -17,11 +17,7 @@ export async function PublicHeader({ hideNav = false }: { hideNav?: boolean }) {
 
         {!hideNav && (
           <nav className="hidden items-center gap-5 text-sm font-medium text-ink-muted md:flex">
-            <Link
-              href="/nouvelles-mesures"
-              className="inline-flex items-center gap-1.5 rounded-full bg-danger-soft px-3 py-1 font-semibold text-danger hover:bg-danger hover:text-white"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-danger" aria-hidden />
+            <Link href="/nouvelles-mesures" className="font-semibold text-danger hover:opacity-80">
               Nouvelles mesures
             </Link>
             <Link href="/#tarifs" className="hover:text-ink">Tarifs</Link>

@@ -8,9 +8,9 @@ export function Label({
   ...rest
 }: LabelHTMLAttributes<HTMLLabelElement> & { required?: boolean }) {
   return (
-    <label {...rest} className={cn('mb-1.5 block text-sm font-medium text-slate-700', className)}>
+    <label {...rest} className={cn('mb-1.5 block text-sm font-medium text-ink-muted', className)}>
       {children}
-      {required && <span className="ml-0.5 text-red-500">*</span>}
+      {required && <span className="ml-0.5 text-danger">*</span>}
     </label>
   );
 }

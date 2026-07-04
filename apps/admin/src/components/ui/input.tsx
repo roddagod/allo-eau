@@ -2,13 +2,13 @@ import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes 
 import { cn } from '@/lib/cn';
 
 const base =
-  'block w-full rounded-xl border border-slate-300 bg-white px-4 text-base ' +
-  'placeholder:text-slate-400 focus-visible:border-gabon-green focus-visible:outline-none ' +
-  'focus-visible:ring-2 focus-visible:ring-gabon-green/30 ' +
-  'aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-red-100';
+  'block w-full rounded-lg border border-surface-border bg-white px-4 text-base text-ink ' +
+  'placeholder:text-ink-subtle focus-visible:border-primary focus-visible:outline-none ' +
+  'focus-visible:ring-2 focus-visible:ring-primary/25 ' +
+  'aria-[invalid=true]:border-danger aria-[invalid=true]:ring-danger-soft';
 
 export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...rest} className={cn(base, 'h-11', className)} />;
+  return <input {...rest} className={cn(base, 'min-h-touch', className)} />;
 }
 
 export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
@@ -17,7 +17,7 @@ export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLText
 
 export function Select({ className, children, ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select {...rest} className={cn(base, 'h-11 pr-10', className)}>
+    <select {...rest} className={cn(base, 'min-h-touch pr-10', className)}>
       {children}
     </select>
   );
