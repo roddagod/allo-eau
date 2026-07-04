@@ -1,0 +1,8 @@
+{
+  "extends": "@eaupourtous/config/tsconfig/base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

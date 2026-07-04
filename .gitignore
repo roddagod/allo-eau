@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Production
+build/
+dist/
+
+# Turbo
+.turbo/
+
+# Vercel
+.vercel
+
+# Environment
+.env
+.env*.local
+.env.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Supabase
+.branches/
+.temp/
+supabase/.branches/
+supabase/.temp/
+
+# Local artifacts
+*.pmtiles.tmp
+.claude/
+maplbv.png
+
+# Design system generated
+design-system/
