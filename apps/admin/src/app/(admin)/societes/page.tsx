@@ -46,11 +46,20 @@ export default async function CompaniesPage() {
 
   return (
     <div>
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Sociétés</h1>
-        <p className="mt-1 text-sm text-ink-muted">
-          Validez, suspendez et attribuez les zones couvertes.
-        </p>
+      <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Opérateurs</p>
+          <h1 className="mt-1 text-2xl font-bold text-ink sm:text-3xl">Sociétés</h1>
+          <p className="mt-1 text-sm text-ink-muted">
+            {companies.length} enregistrée{companies.length > 1 ? 's' : ''} · Validez, activez, attribuez les zones.
+          </p>
+        </div>
+        <Link
+          href="/societes/nouvelle"
+          className="inline-flex min-h-touch items-center justify-center gap-2 rounded-lg bg-accent px-4 text-sm font-semibold text-white hover:bg-accent-700"
+        >
+          Nouvelle société
+        </Link>
       </header>
 
       {companies.length === 0 && (

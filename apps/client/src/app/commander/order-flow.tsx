@@ -232,7 +232,7 @@ export function OrderFlow(props: {
             </div>
             <div>
               <Label htmlFor="ph" required>Téléphone (Gabon)</Label>
-              <Input id="ph" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+241 XX XX XX XX" autoComplete="tel" required />
+              <Input id="ph" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="07 XX XX XX XX" autoComplete="tel" required />
               <FieldError message={err['phone']} />
               <p className="mt-1 text-xs text-ink-subtle">Un code de vérification sera envoyé sur ce numéro.</p>
             </div>

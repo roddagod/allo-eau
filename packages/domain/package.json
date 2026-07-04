@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./pricing": "./src/pricing.ts",
     "./order-status": "./src/order-status.ts",
-    "./schemas": "./src/schemas.ts"
+    "./schemas": "./src/schemas.ts",
+    "./phone": "./src/phone.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

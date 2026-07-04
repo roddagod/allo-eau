@@ -54,7 +54,7 @@ export function SignupForm({ zones }: { zones: Zone[] }) {
             id="phone"
             name="phone"
             type="tel"
-            placeholder="+241 XX XX XX XX"
+            placeholder="07 XX XX XX XX"
             autoComplete="tel"
             required
             aria-invalid={!!err['phone']}
