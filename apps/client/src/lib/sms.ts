@@ -105,7 +105,7 @@ export async function sendSms(args: {
 
     const extract = (tag: string) => {
       const m = raw.match(new RegExp(`<${tag}>\\s*([^<]*?)\\s*</${tag}>`, 'i'));
-      return m ? m[1].trim() : undefined;
+      return m?.[1]?.trim();
     };
 
     const msgid = extract('msgid');

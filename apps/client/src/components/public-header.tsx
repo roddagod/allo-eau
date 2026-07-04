@@ -17,11 +17,16 @@ export async function PublicHeader({ hideNav = false }: { hideNav?: boolean }) {
 
         {!hideNav && (
           <nav className="hidden items-center gap-5 text-sm font-medium text-ink-muted md:flex">
-            <Link href="/#comment" className="hover:text-ink">Comment ça marche</Link>
+            <Link
+              href="/nouvelles-mesures"
+              className="inline-flex items-center gap-1.5 rounded-full bg-danger-soft px-3 py-1 font-semibold text-danger hover:bg-danger hover:text-white"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-danger" aria-hidden />
+              Nouvelles mesures
+            </Link>
             <Link href="/#tarifs" className="hover:text-ink">Tarifs</Link>
-            <Link href="/#zones" className="hover:text-ink">Zones</Link>
-            <Link href="/nouvelles-mesures" className="hover:text-ink">Nouvelles mesures</Link>
             <Link href="/#urgence" className="hover:text-ink">Numéros verts</Link>
+            <Link href="/#comment" className="hover:text-ink">Comment ça marche</Link>
           </nav>
         )}
 

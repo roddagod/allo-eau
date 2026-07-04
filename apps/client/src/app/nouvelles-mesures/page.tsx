@@ -37,7 +37,12 @@ async function fetchPrices(): Promise<CurrentPrice[]> {
 }
 
 // Numéros verts officiels — Communiqué N°2 du 02/07/2026
-const HOTLINES = [
+const HOTLINES: ReadonlyArray<{
+  name: string;
+  number: string;
+  role: string;
+  special?: boolean;
+}> = [
   { name: 'Corps des Sapeurs-Pompiers', number: '18',  role: 'Distribution' },
   { name: 'Génie Militaire',            number: '181', role: 'Distribution' },
   { name: 'Garde Républicaine',         number: '182', role: 'Distribution' },
@@ -48,7 +53,7 @@ const HOTLINES = [
     role: 'Non-respect tarifs',
     special: true,
   },
-] as const;
+];
 
 const COMMUNIQUES = [
   {

@@ -174,7 +174,7 @@ export default async function HomePage() {
             <dl className="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-white/15 pt-6 text-sm">
               <div>
                 <dt className="text-white/60">Cuve 1 000 L</dt>
-                <dd className="mt-1 text-xl font-bold">3 000 FCFA</dd>
+                <dd className="mt-1 text-xl font-bold">4 000 FCFA</dd>
               </div>
               <div>
                 <dt className="text-white/60">Quartiers</dt>
@@ -185,6 +185,62 @@ export default async function HomePage() {
                 <dd className="mt-1 text-xl font-bold">Incluse</dd>
               </div>
             </dl>
+          </div>
+        </section>
+
+        {/* ===================== BANDEAU MESURES EN VIGUEUR ===================== */}
+        <section className="border-b border-primary-100 bg-white">
+          <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-3">
+                <span
+                  className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-danger-soft text-danger"
+                  aria-hidden
+                >
+                  <AlertTriangleIcon className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-danger">
+                    Mesures en vigueur depuis le 02/07/2026
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-ink">
+                    Communiqué de presse N°2 du Ministère · Tarif révisé · 5 numéros verts opérationnels
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/nouvelles-mesures"
+                className="inline-flex min-h-touch shrink-0 items-center justify-center gap-2 rounded-lg border border-primary bg-white px-4 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none"
+              >
+                Lire toutes les mesures
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+            </div>
+
+            {/* Chips résumé — les 3 faits importants du communiqué N°2 */}
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
+                <DropletIcon className="h-5 w-5 shrink-0 text-primary" />
+                <div className="min-w-0 text-sm">
+                  <span className="font-bold text-ink">4 000 FCFA</span>
+                  <span className="ml-1 text-ink-muted">le m³, livraison incluse</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
+                <PhoneIcon className="h-5 w-5 shrink-0 text-primary" />
+                <div className="min-w-0 text-sm">
+                  <span className="font-bold text-ink">18 · 181 · 182 · 183</span>
+                  <span className="ml-1 text-ink-muted">numéros distribution</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-xl border border-surface-border bg-surface-muted px-3 py-2">
+                <TruckIcon className="h-5 w-5 shrink-0 text-primary" />
+                <div className="min-w-0 text-sm">
+                  <span className="font-bold text-ink">Militaires + opérateurs</span>
+                  <span className="ml-1 text-ink-muted">homologués DGE</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

@@ -110,13 +110,20 @@ export function OrderFlow(props: {
   const isLast = step === 'schedule';
   const action = mode === 'guest' ? sendAction : authAction;
   const pending = mode === 'guest' ? sending : authPending;
-  const state = mode === 'guest' ? sendState : authState;
-  const err = state.step === 'form' && 'fieldErrors' in state
-    ? state.fieldErrors ?? {}
-    : ('fieldErrors' in state && state.fieldErrors) ? state.fieldErrors : {};
-  const errorMessage =
-    (state.step === 'form' && 'message' in state ? state.message : undefined) ??
-    ('message' in state ? state.message : undefined);
+
+  // Erreurs par champ + message d'erreur global — normalisation entre les deux jeux d'actions
+  let err: Record<string, string> = {};
+  let errorMessage: string | undefined;
+
+  if (mode === 'guest') {
+    if (sendState.step === 'form') {
+      err = sendState.fieldErrors ?? {};
+      errorMessage = sendState.message;
+    }
+  } else {
+    err = authState.fieldErrors ?? {};
+    errorMessage = authState.message;
+  }
 
   const canGoNext = (): boolean => {
     if (step === 'contact')  return firstName.trim().length > 0 && lastName.trim().length > 0 && phone.trim().length >= 8;

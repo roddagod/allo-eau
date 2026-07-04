@@ -187,6 +187,7 @@ export type Database = {
           location_updated_at: string | null
           max_concurrent_orders: number
           primary_zone_id: string | null
+          reference: string | null
           status: Database["public"]["Enums"]["driver_status"]
           updated_at: string
         }
@@ -202,6 +203,7 @@ export type Database = {
           location_updated_at?: string | null
           max_concurrent_orders?: number
           primary_zone_id?: string | null
+          reference?: string | null
           status?: Database["public"]["Enums"]["driver_status"]
           updated_at?: string
         }
@@ -217,6 +219,7 @@ export type Database = {
           location_updated_at?: string | null
           max_concurrent_orders?: number
           primary_zone_id?: string | null
+          reference?: string | null
           status?: Database["public"]["Enums"]["driver_status"]
           updated_at?: string
         }
@@ -448,6 +451,7 @@ export type Database = {
           dispatched_by: Database["public"]["Enums"]["dispatch_mode"] | null
           driver_id: string | null
           estimated_arrival_at: string | null
+          guest_access_token: string | null
           id: string
           incident_details: string | null
           incident_type: string | null
@@ -486,6 +490,7 @@ export type Database = {
           dispatched_by?: Database["public"]["Enums"]["dispatch_mode"] | null
           driver_id?: string | null
           estimated_arrival_at?: string | null
+          guest_access_token?: string | null
           id?: string
           incident_details?: string | null
           incident_type?: string | null
@@ -524,6 +529,7 @@ export type Database = {
           dispatched_by?: Database["public"]["Enums"]["dispatch_mode"] | null
           driver_id?: string | null
           estimated_arrival_at?: string | null
+          guest_access_token?: string | null
           id?: string
           incident_details?: string | null
           incident_type?: string | null
@@ -698,6 +704,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      phone_verifications: {
+        Row: {
+          attempts: number
+          code_hash: string
+          created_at: string
+          expires_at: string
+          id: string
+          order_draft: Json
+          phone: string
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          order_draft: Json
+          phone: string
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          order_draft?: Json
+          phone?: string
+          verified_at?: string | null
+        }
+        Relationships: []
       }
       price_tiers: {
         Row: {
@@ -1541,6 +1580,7 @@ export type Database = {
       }
       postgis_version: { Args: never; Returns: string }
       postgis_wagyu_version: { Args: never; Returns: string }
+      purge_old_phone_verifications: { Args: never; Returns: undefined }
       purge_old_position_history: { Args: never; Returns: undefined }
       st_3dclosestpoint: {
         Args: { geom1: unknown; geom2: unknown }
@@ -2383,5 +2423,3 @@ export const Constants = {
     },
   },
 } as const
-A new version of Supabase CLI is available: v2.109.0 (currently installed v2.30.4)
-We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli
