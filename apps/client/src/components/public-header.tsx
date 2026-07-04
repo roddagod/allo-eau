@@ -16,11 +16,12 @@ export async function PublicHeader({ hideNav = false }: { hideNav?: boolean }) {
         <BrandMark variant="light" size="md" />
 
         {!hideNav && (
-          <nav className="hidden items-center gap-6 text-sm font-medium text-ink-muted md:flex">
+          <nav className="hidden items-center gap-5 text-sm font-medium text-ink-muted md:flex">
             <Link href="/#comment" className="hover:text-ink">Comment ça marche</Link>
-            <Link href="/#tarifs" className="hover:text-ink">Tarifs officiels</Link>
-            <Link href="/#zones" className="hover:text-ink">Zones desservies</Link>
-            <Link href="/#urgence" className="hover:text-ink">Urgence</Link>
+            <Link href="/#tarifs" className="hover:text-ink">Tarifs</Link>
+            <Link href="/#zones" className="hover:text-ink">Zones</Link>
+            <Link href="/nouvelles-mesures" className="hover:text-ink">Nouvelles mesures</Link>
+            <Link href="/#urgence" className="hover:text-ink">Numéros verts</Link>
           </nav>
         )}
 

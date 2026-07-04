@@ -8,9 +8,8 @@ import {
   TruckIcon,
   PhoneIcon,
   MapPinIcon,
-  ClockIcon,
-  ShieldIcon,
   ArrowRightIcon,
+  AlertTriangleIcon,
 } from '@/components/icons';
 
 // Toujours re-fetcher les zones/tarifs à chaque requête
@@ -342,55 +341,68 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ===================== NUMÉRO VERT ===================== */}
+        {/* ===================== NUMÉROS VERTS ===================== */}
         <section id="urgence" className="bg-primary text-white">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
-              <div className="lg:col-span-7">
-                <p className="text-sm font-semibold uppercase tracking-widest text-accent">
-                  Assistance
-                </p>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-                  Un numéro vert dédié en cas d’urgence
-                </h2>
-                <p className="mt-4 max-w-xl text-base text-white/80 sm:text-lg">
-                  Pour toute demande urgente ou pour passer commande par téléphone, un numéro vert
-                  est mis à disposition dans le cadre du dispositif d’urgence hydrique.
-                </p>
-                <ul className="mt-6 space-y-3 text-sm text-white/85">
-                  <li className="flex items-start gap-3">
-                    <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                    <span>Disponible 24 heures sur 24, 7 jours sur 7.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                    <span>Couverture de l’ensemble du Grand Libreville.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <ShieldIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-                    <span>Assistance directe par un opérateur habilité.</span>
-                  </li>
-                </ul>
-              </div>
+          <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-widest text-accent">
+                Cinq numéros verts
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                Assistance disponible 24 heures sur 24
+              </h2>
+              <p className="mt-4 text-base text-white/80 sm:text-lg">
+                Pour passer commande par téléphone ou signaler une urgence, appelez l’un des
+                numéros verts officiels. Appel gratuit depuis un mobile.
+              </p>
+            </div>
 
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl border border-white/15 bg-white/5 p-8">
-                  <p className="text-sm font-medium uppercase tracking-widest text-white/70">
-                    Numéro vert
-                  </p>
-                  <p className="mt-2 flex items-center gap-4 text-6xl font-bold sm:text-7xl">
-                    <PhoneIcon className="h-10 w-10 text-accent" />
-                    18
-                  </p>
+            <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { number: '18',  name: 'Sapeurs-Pompiers' },
+                { number: '181', name: 'Génie Militaire' },
+                { number: '182', name: 'Garde Républicaine' },
+                { number: '183', name: 'Gendarmerie Nationale' },
+              ].map((h) => (
+                <li key={h.number}>
                   <a
-                    href="tel:18"
-                    className="mt-6 inline-flex min-h-touch w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 font-semibold text-white transition-colors hover:bg-accent-700 focus-visible:outline-none"
+                    href={`tel:${h.number}`}
+                    className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4 transition-colors hover:border-accent hover:bg-white/10 focus-visible:outline-none"
                   >
-                    Appeler le 18
+                    <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent text-white">
+                      <PhoneIcon className="h-6 w-6" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-white/70">{h.name}</p>
+                      <p className="mt-0.5 font-mono text-2xl font-bold">{h.number}</p>
+                    </div>
                   </a>
-                  <p className="mt-3 text-center text-xs text-white/70">Appel gratuit depuis un mobile</p>
-                </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-danger text-white">
+                <AlertTriangleIcon className="h-5 w-5" />
+              </span>
+              <div className="flex-1">
+                <p className="text-xs uppercase tracking-widest text-white/70">
+                  Signalement d’abus tarifaire
+                </p>
+                <p className="mt-0.5 text-sm text-white">
+                  Ministère de l’Accès Universel à l’Eau —{' '}
+                  <a href="tel:184" className="font-mono text-lg font-bold text-white underline">
+                    184
+                  </a>
+                </p>
               </div>
+              <Link
+                href="/nouvelles-mesures"
+                className="inline-flex min-h-touch items-center gap-2 rounded-lg border border-white/30 bg-transparent px-4 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none"
+              >
+                Toutes les mesures
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
