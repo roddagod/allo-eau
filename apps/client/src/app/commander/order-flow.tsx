@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { FieldError } from '@/components/ui/field-error';
 import { ProgressBar, StepHeader, type WizardStep } from '@/components/wizard/progress-bar';
 import { formatFcfa, calculateOrderTotal } from '@eaupourtous/domain/pricing';
-import { PhoneIcon } from '@/components/icons';
+import { PhoneIcon, CrosshairIcon } from '@/components/icons';
 import { createOrderAction, type OrderActionState } from '@/lib/order-actions';
 import {
   sendGuestOtpAction,
@@ -83,6 +83,41 @@ export function OrderFlow(props: {
   const [preferredDeliveryDate, setPreferredDeliveryDate] = useState('');
   const [preferredDeliveryTime, setPreferredDeliveryTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<keyof typeof paymentLabels>('cash');
+
+  // Géolocalisation
+  const [deliveryPoint, setDeliveryPoint] = useState<{ lat: number; lng: number; accuracy: number } | null>(null);
+  const [geoState, setGeoState] = useState<'idle' | 'loading' | 'error' | 'success'>('idle');
+  const [geoError, setGeoError] = useState<string | null>(null);
+
+  const captureLocation = () => {
+    if (!navigator.geolocation) {
+      setGeoState('error');
+      setGeoError('Géolocalisation non supportée par ce navigateur.');
+      return;
+    }
+    setGeoState('loading');
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setDeliveryPoint({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
+        });
+        setGeoState('success');
+      },
+      (err) => {
+        setGeoState('error');
+        setGeoError(
+          err.code === 1 ? 'Permission refusée par le navigateur.' :
+          err.code === 2 ? 'Position indisponible.' :
+          err.code === 3 ? 'Délai dépassé.' :
+          'Erreur de géolocalisation.',
+        );
+      },
+      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 },
+    );
+  };
 
   const currentPrice = useMemo(
     () => prices.find((p) => p.volume_liters === volumeLiters) ?? null,
@@ -165,6 +200,13 @@ export function OrderFlow(props: {
       <input type="hidden" name="preferredDeliveryDate" value={preferredDeliveryDate} />
       <input type="hidden" name="preferredDeliveryTime" value={preferredDeliveryTime} />
       <input type="hidden" name="paymentMethod" value={paymentMethod} />
+      {deliveryPoint && (
+        <>
+          <input type="hidden" name="deliveryPointLat" value={deliveryPoint.lat} />
+          <input type="hidden" name="deliveryPointLng" value={deliveryPoint.lng} />
+          <input type="hidden" name="deliveryPointAccuracy" value={deliveryPoint.accuracy} />
+        </>
+      )}
 
       <section className="rounded-2xl border border-surface-border bg-white p-5 sm:p-6">
         {/* Étape Contact (guest uniquement) */}
@@ -225,6 +267,47 @@ export function OrderFlow(props: {
               <Textarea id="ad" value={address} onChange={(e) => setAddress(e.target.value)} required placeholder="Rue, immeuble, étage…" aria-invalid={!!err['address']} />
               <FieldError message={err['address']} />
             </div>
+
+            {/* Bouton géolocalisation */}
+            <div>
+              <Label>Position GPS (optionnel, aide le livreur à vous trouver)</Label>
+              {deliveryPoint ? (
+                <div className="flex items-start justify-between gap-3 rounded-lg bg-accent-50 p-3">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent text-white">
+                      <CrosshairIcon className="h-4 w-4" />
+                    </span>
+                    <div className="text-sm">
+                      <p className="font-medium text-ink">Position enregistrée</p>
+                      <p className="mt-0.5 text-xs text-ink-muted">
+                        Précision ± {Math.round(deliveryPoint.accuracy)} m
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setDeliveryPoint(null); setGeoState('idle'); }}
+                    className="text-xs font-medium text-ink-muted underline hover:text-ink"
+                  >
+                    Effacer
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={captureLocation}
+                  disabled={geoState === 'loading'}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-primary shadow-sm hover:bg-primary-50 disabled:opacity-70"
+                >
+                  <CrosshairIcon className="h-5 w-5" />
+                  {geoState === 'loading' ? 'Localisation en cours…' : 'Utiliser ma position actuelle'}
+                </button>
+              )}
+              {geoError && (
+                <p className="mt-1.5 text-xs text-danger">{geoError}</p>
+              )}
+            </div>
+
             <div>
               <Label htmlFor="lm">Repère de livraison</Label>
               <Input id="lm" value={deliveryLandmark} onChange={(e) => setDeliveryLandmark(e.target.value)} placeholder="En face de la pharmacie du carrefour" />

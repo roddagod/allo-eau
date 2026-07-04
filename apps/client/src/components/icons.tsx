@@ -96,3 +96,13 @@ export function ChevronDownIcon(p: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function CrosshairIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+    </svg>
+  );
+}

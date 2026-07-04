@@ -11,6 +11,7 @@ import {
   MapPinIcon,
   ArrowRightIcon,
   AlertTriangleIcon,
+  ShieldIcon,
 } from '@/components/icons';
 
 // Toujours re-fetcher les zones/tarifs à chaque requête
@@ -44,25 +45,11 @@ async function fetchLandingData() {
   return { prices: prices ?? [], zones: zones ?? [] };
 }
 
-const PARTNERS = [
-  {
-    name: 'Génie Militaire',
-    role: 'Forces de Défense et de Sécurité',
-    description:
-      'Assure la logistique de distribution des cuves d’eau dans le cadre du dispositif d’urgence.',
-  },
-  {
-    name: 'Brigade des Sapeurs-Pompiers',
-    role: 'Forces de Défense et de Sécurité',
-    description:
-      'Intervient sur les zones critiques et complète le maillage de livraison sur l’ensemble du Grand Libreville.',
-  },
-  {
-    name: 'Garde Républicaine',
-    role: 'Forces de Défense et de Sécurité',
-    description:
-      'Renforce le dispositif de distribution et sécurise les tournées prioritaires.',
-  },
+const MILITARY_PARTNERS = [
+  { name: 'Corps des Sapeurs-Pompiers', hotline: '18'  },
+  { name: 'Génie Militaire',            hotline: '181' },
+  { name: 'Garde Républicaine',         hotline: '182' },
+  { name: 'Gendarmerie Nationale',      hotline: '183' },
 ];
 
 const STEPS = [
@@ -304,26 +291,72 @@ export default async function HomePage() {
               <p className="text-sm font-semibold uppercase tracking-widest text-primary">
                 Opérateurs partenaires
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-                La logistique nationale mobilisée
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                Un dispositif mixte
               </h2>
-              <p className="mt-4 text-base text-slate-600 sm:text-lg">
-                Les Forces de Défense et de Sécurité sont réquisitionnées pour assurer la
-                distribution dans le cadre de l’état d’urgence hydrique.
+              <p className="mt-3 text-base text-ink-muted sm:text-lg">
+                La distribution est assurée <span className="font-semibold text-ink">concomitamment</span> par
+                les Forces de Défense et de Sécurité et par les opérateurs privés homologués par la
+                Direction Générale de l’Eau.
               </p>
             </div>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {PARTNERS.map((partner) => (
-                <article key={partner.name} className="rounded-lg border border-slate-200 bg-white p-6">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary">
-                    <TruckIcon className="h-6 w-6" />
+            <div className="mt-10 grid gap-6 lg:grid-cols-2">
+              {/* Bloc militaire */}
+              <div>
+                <div className="flex items-baseline gap-2 border-b border-surface-border pb-3">
+                  <TruckIcon className="h-5 w-5 shrink-0 text-primary" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-ink-muted">
+                    Forces de Défense et de Sécurité
+                  </p>
+                  <span className="ml-auto font-display text-lg font-bold text-primary">
+                    {MILITARY_PARTNERS.length}
                   </span>
-                  <h3 className="mt-5 text-lg font-bold text-slate-900">{partner.name}</h3>
-                  <p className="mt-1 text-xs uppercase tracking-widest text-slate-500">{partner.role}</p>
-                  <p className="mt-3 text-sm text-slate-600">{partner.description}</p>
-                </article>
-              ))}
+                </div>
+                <ul className="mt-4 space-y-2">
+                  {MILITARY_PARTNERS.map((p) => (
+                    <li key={p.name} className="flex items-center justify-between gap-3 rounded-lg bg-white p-3 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary">
+                          <ShieldIcon className="h-4 w-4" />
+                        </span>
+                        <span className="text-sm font-medium text-ink">{p.name}</span>
+                      </div>
+                      <a href={`tel:${p.hotline}`} className="font-mono text-sm font-bold text-primary">
+                        {p.hotline}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Bloc privé */}
+              <div>
+                <div className="flex items-baseline gap-2 border-b border-surface-border pb-3">
+                  <DropletIcon className="h-5 w-5 shrink-0 text-primary" />
+                  <p className="text-xs font-bold uppercase tracking-widest text-ink-muted">
+                    Opérateurs privés homologués
+                  </p>
+                  <span className="ml-auto text-xs font-medium text-ink-subtle">
+                    Homologation DGE
+                  </span>
+                </div>
+                <div className="mt-4 rounded-lg bg-white p-5 shadow-sm">
+                  <p className="text-sm text-ink-muted">
+                    Les sociétés privées intègrent progressivement le dispositif après validation
+                    des procédures d’homologation par la <span className="font-semibold text-ink">Direction
+                    Générale de l’Eau</span>. Elles opèrent aux <span className="font-semibold text-ink">mêmes
+                    tarifs officiels</span>, avec la même plateforme d’attribution.
+                  </p>
+                  <p className="mt-4 text-xs uppercase tracking-widest text-ink-subtle">
+                    Vous êtes opérateur d’eau ?
+                  </p>
+                  <p className="mt-1 text-sm text-ink">
+                    Rapprochez-vous de la Direction Générale de l’Eau pour engager la procédure
+                    d’homologation.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

@@ -43,6 +43,11 @@ export async function createOrderAction(
     clientInstructions:    formData.get('clientInstructions') || undefined,
   };
 
+  const latRaw = formData.get('deliveryPointLat');
+  const lngRaw = formData.get('deliveryPointLng');
+  const deliveryPointWkt =
+    latRaw && lngRaw ? `POINT(${Number(lngRaw)} ${Number(latRaw)})` : null;
+
   const parsed = createOrderSchema.safeParse(raw);
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
@@ -70,6 +75,7 @@ export async function createOrderAction(
       preferred_delivery_date: input.preferredDeliveryDate ?? null,
       preferred_delivery_time: input.preferredDeliveryTime ?? null,
       client_instructions:     input.clientInstructions ?? null,
+      delivery_point:          deliveryPointWkt as unknown as never, // WKT accepté par PostGIS geography
     })
     .select('id, reference')
     .single<{ id: string; reference: string }>();

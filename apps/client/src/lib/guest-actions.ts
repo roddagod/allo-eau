@@ -47,6 +47,13 @@ export async function sendGuestOtpAction(
   _prev: SendOtpState,
   formData: FormData,
 ): Promise<SendOtpState> {
+  const latRaw = formData.get('deliveryPointLat');
+  const lngRaw = formData.get('deliveryPointLng');
+  const deliveryPoint =
+    latRaw && lngRaw
+      ? { latitude: Number(latRaw), longitude: Number(lngRaw) }
+      : undefined;
+
   const draft: unknown = {
     firstName:             formData.get('firstName'),
     lastName:              formData.get('lastName'),
@@ -55,6 +62,7 @@ export async function sendGuestOtpAction(
     address:               formData.get('address'),
     deliveryLandmark:      formData.get('deliveryLandmark') || undefined,
     clientInstructions:    formData.get('clientInstructions') || undefined,
+    deliveryPoint,
     volumeLiters:          Number(formData.get('volumeLiters')),
     quantity:              Number(formData.get('quantity')),
     paymentMethod:         formData.get('paymentMethod'),
@@ -215,6 +223,9 @@ export async function verifyGuestOtpAction(
       preferred_delivery_date: draft.preferredDeliveryDate ?? null,
       preferred_delivery_time: draft.preferredDeliveryTime ?? null,
       client_instructions:     draft.clientInstructions ?? null,
+      delivery_point: draft.deliveryPoint
+        ? (`POINT(${draft.deliveryPoint.longitude} ${draft.deliveryPoint.latitude})` as unknown as never)
+        : null,
     })
     .select('id, reference, guest_access_token')
     .single<{ id: string; reference: string; guest_access_token: string }>();

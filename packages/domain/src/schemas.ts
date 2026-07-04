@@ -74,6 +74,13 @@ export const createOrderSchema = z.object({
 });
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
 
+// Point GPS (WGS84)
+export const geoPointSchema = z.object({
+  latitude:  z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+});
+export type GeoPoint = z.infer<typeof geoPointSchema>;
+
 // Création de commande — parcours guest (sans compte)
 export const guestOrderDraftSchema = z.object({
   firstName:            z.string().min(1, 'Prénom requis').max(80),
@@ -83,6 +90,7 @@ export const guestOrderDraftSchema = z.object({
   address:              z.string().min(1, 'Adresse requise').max(500),
   deliveryLandmark:     z.string().max(500).optional(),
   clientInstructions:   z.string().max(500).optional(),
+  deliveryPoint:        geoPointSchema.optional(),
   volumeLiters:         volumeLitersSchema,
   quantity:             z.number().int().positive().max(50),
   paymentMethod:        paymentMethodSchema,
