@@ -186,3 +186,38 @@ export function CrosshairIcon(p: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function HouseIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <path d="M3 11 12 3l9 8" />
+      <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+    </svg>
+  );
+}
+
+export function TrendUpIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <path d="M4 17l6-6 4 4 6-6" />
+      <path d="M14 5h6v6" />
+    </svg>
+  );
+}
+
+export function CoinIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M15 9c-1-1.5-4-2-6-1s-2 3 0 4c2 1 6 1 6 3s-3 3-6 2c-1.5-.5-2-1-2-2" />
+    </svg>
+  );
+}
+
+export function BoltIcon(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...p}>
+      <path d="M13 3 5 14h6l-1 7 8-11h-6z" />
+    </svg>
+  );
+}

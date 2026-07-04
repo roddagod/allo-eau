@@ -467,6 +467,7 @@ export type Database = {
           refused_company_ids: string[]
           route_id: string | null
           route_sequence: number | null
+          short_code: string | null
           total_amount_fcfa: number
           unit_price_fcfa: number
           updated_at: string
@@ -506,6 +507,7 @@ export type Database = {
           refused_company_ids?: string[]
           route_id?: string | null
           route_sequence?: number | null
+          short_code?: string | null
           total_amount_fcfa?: number
           unit_price_fcfa?: number
           updated_at?: string
@@ -545,6 +547,7 @@ export type Database = {
           refused_company_ids?: string[]
           route_id?: string | null
           route_sequence?: number | null
+          short_code?: string | null
           total_amount_fcfa?: number
           unit_price_fcfa?: number
           updated_at?: string

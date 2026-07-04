@@ -227,8 +227,8 @@ export async function verifyGuestOtpAction(
         ? (`POINT(${draft.deliveryPoint.longitude} ${draft.deliveryPoint.latitude})` as unknown as never)
         : null,
     })
-    .select('id, reference, guest_access_token')
-    .single<{ id: string; reference: string; guest_access_token: string }>();
+    .select('id, reference, guest_access_token, short_code')
+    .single<{ id: string; reference: string; guest_access_token: string; short_code: string }>();
 
   if (orderError || !order) {
     return {
@@ -236,6 +236,13 @@ export async function verifyGuestOtpAction(
       message: `Impossible de créer la commande : ${orderError?.message ?? 'inconnu'}`,
     };
   }
+
+  // SMS de confirmation avec short link
+  const siteHost = (process.env.NEXT_PUBLIC_CLIENT_URL ?? 'https://allo-eau.ga').replace(/^https?:\/\//, '');
+  await sendSms({
+    to: challenge.phone,
+    text: `Allo Eau : commande ${order.reference} enregistree. Suivi : ${siteHost}/s/${order.short_code}`,
+  });
 
   redirect(`/suivre/${order.id}?t=${order.guest_access_token}`);
 }
