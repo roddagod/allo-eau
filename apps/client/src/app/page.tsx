@@ -234,70 +234,64 @@ export default async function HomePage() {
               'linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0.95) 40%, rgba(255,255,255,0.55) 100%), url(/maplbv.webp)',
           }}
         >
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
             {/* Header */}
             <div className="mx-auto max-w-2xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary">
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                 Grand Libreville
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+              <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
                 Un maillage de {zones.length} quartiers desservis
               </h2>
-              <p className="mt-4 text-base text-ink-muted sm:text-lg">
-                Le dispositif couvre progressivement l’ensemble de l’estuaire, organisé en secteurs
-                logistiques prioritaires.
+              <p className="mt-2 text-sm text-ink-muted sm:text-base">
+                Le dispositif couvre progressivement l’estuaire, organisé en secteurs logistiques.
               </p>
             </div>
 
-            {/* Stats */}
-            <dl className="mx-auto mt-12 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+            {/* Stats — bande compacte */}
+            <dl className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-8 gap-y-2 rounded-lg bg-white px-6 py-3 shadow-sm">
               {[
-                { label: 'Secteurs',       value: Object.keys(zonesBySector).length },
-                { label: 'Quartiers',      value: zones.length },
-                { label: 'Nouveaux',       value: '+2' },
-                { label: 'Livraison',      value: '7j/7' },
+                { label: 'Secteurs',  value: Object.keys(zonesBySector).length },
+                { label: 'Quartiers', value: zones.length },
+                { label: 'Nouveaux',  value: '+2' },
+                { label: 'Livraison', value: '7j/7' },
               ].map((s) => (
-                <div key={s.label} className="rounded-lg bg-white p-4 text-center shadow-sm">
+                <div key={s.label} className="flex items-baseline gap-2">
+                  <dd className="font-display text-xl font-bold text-primary">{s.value}</dd>
                   <dt className="text-xs font-medium uppercase tracking-widest text-ink-subtle">
                     {s.label}
                   </dt>
-                  <dd className="mt-1 font-display text-3xl font-bold text-primary">
-                    {s.value}
-                  </dd>
                 </div>
               ))}
             </dl>
 
-            {/* Sector cards — grille 2x2 sur desktop, 1 col mobile */}
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Sector cards */}
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {Object.entries(zonesBySector).map(([sector, list]) => (
-                <article key={sector} className="flex flex-col rounded-lg bg-white p-5 shadow-sm">
-                  <header className="flex items-baseline justify-between gap-3 border-b border-surface-border pb-3">
-                    <div className="flex items-center gap-2">
-                      <MapPinIcon className="h-4 w-4 shrink-0 text-primary" />
-                      <h3 className="text-sm font-bold uppercase tracking-widest text-ink-muted">
+                <article key={sector} className="rounded-lg bg-white p-4 shadow-sm">
+                  <header className="flex items-baseline justify-between gap-2 border-b border-surface-border pb-2">
+                    <div className="flex items-center gap-1.5">
+                      <MapPinIcon className="h-3.5 w-3.5 shrink-0 text-primary" />
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-ink-muted">
                         {sector}
                       </h3>
                     </div>
-                    <span className="font-display text-xl font-bold text-primary">
+                    <span className="font-display text-lg font-bold text-primary">
                       {list.length}
                     </span>
                   </header>
-                  <ul className="mt-3 space-y-1.5">
+                  <ul className="mt-2 space-y-1">
                     {list.map((z) => (
-                      <li key={z.id} className="text-sm text-ink">
-                        {z.name}
-                      </li>
+                      <li key={z.id} className="text-sm text-ink">{z.name}</li>
                     ))}
                   </ul>
                 </article>
               ))}
             </div>
 
-            {/* Note en bas */}
-            <p className="mt-8 text-center text-xs text-ink-subtle">
-              Deux quartiers ajoutés à la suite du dispositif d’urgence :{' '}
-              <span className="font-semibold text-ink">Akébé</span> et{' '}
+            <p className="mt-4 text-center text-xs text-ink-subtle">
+              Nouveaux quartiers ajoutés dans le cadre du dispositif d’urgence :{' '}
+              <span className="font-semibold text-ink">Akébé</span> ·{' '}
               <span className="font-semibold text-ink">Bikélé</span>.
             </p>
           </div>
