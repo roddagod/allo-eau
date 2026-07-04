@@ -15,7 +15,7 @@ export function AppNav({ user }: { user: CurrentUser }) {
     'Bienvenue';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-surface-border bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-surface-border bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <BrandMark variant="light" size="md" />
 

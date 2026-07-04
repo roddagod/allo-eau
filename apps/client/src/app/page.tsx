@@ -166,7 +166,7 @@ export default async function HomePage() {
 
             <ol className="mt-12 grid gap-6 sm:grid-cols-3">
               {STEPS.map((step, i) => (
-                <li key={step.title} className="rounded-2xl border border-slate-200 bg-white p-6">
+                <li key={step.title} className="rounded-lg border border-slate-200 bg-white p-6">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-bold text-white">
                     {i + 1}
                   </span>
@@ -198,7 +198,7 @@ export default async function HomePage() {
               {prices.map((p) => (
                 <article
                   key={p.tier_id}
-                  className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6"
+                  className="flex flex-col rounded-lg border border-slate-200 bg-white p-6"
                 >
                   <div className="flex items-center gap-3">
                     <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary">
@@ -289,7 +289,7 @@ export default async function HomePage() {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {PARTNERS.map((partner) => (
-                <article key={partner.name} className="rounded-2xl border border-slate-200 bg-white p-6">
+                <article key={partner.name} className="rounded-lg border border-slate-200 bg-white p-6">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary">
                     <TruckIcon className="h-6 w-6" />
                   </span>
@@ -328,7 +328,7 @@ export default async function HomePage() {
                 <li key={h.number}>
                   <a
                     href={`tel:${h.number}`}
-                    className="flex items-center gap-4 rounded-2xl bg-white/10 p-4 transition-colors hover:bg-white/20 focus-visible:outline-none"
+                    className="flex items-center gap-4 rounded-lg bg-white/10 p-4 transition-colors hover:bg-white/20 focus-visible:outline-none"
                   >
                     <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent text-white">
                       <PhoneIcon className="h-6 w-6" />
@@ -342,7 +342,7 @@ export default async function HomePage() {
               ))}
             </ul>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl bg-white/10 p-4">
+            <div className="mt-6 flex flex-wrap items-center gap-4 rounded-lg bg-white/10 p-4">
               <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-danger text-white">
                 <AlertTriangleIcon className="h-5 w-5" />
               </span>

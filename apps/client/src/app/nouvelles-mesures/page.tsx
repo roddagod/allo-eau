@@ -119,7 +119,7 @@ export default async function NouvellesMesuresPage() {
               {COMMUNIQUES.map((c) => (
                 <article
                   key={c.number}
-                  className="rounded-2xl bg-surface-muted p-6"
+                  className="rounded-lg bg-surface-muted p-6"
                 >
                   <div className="flex flex-wrap items-baseline gap-3">
                     <span className="rounded-full bg-primary-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
@@ -170,7 +170,7 @@ export default async function NouvellesMesuresPage() {
               {prices.map((p) => (
                 <article
                   key={p.tier_id}
-                  className="flex flex-col rounded-2xl bg-surface-muted p-5"
+                  className="flex flex-col rounded-lg bg-surface-muted p-5"
                 >
                   <div className="flex items-center gap-3">
                     <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary-50 text-primary">
@@ -216,7 +216,7 @@ export default async function NouvellesMesuresPage() {
                   <a
                     href={`tel:${h.number}`}
                     className={
-                      'flex items-center gap-4 rounded-2xl p-4 transition-colors ' +
+                      'flex items-center gap-4 rounded-lg p-4 transition-colors ' +
                       (h.special
                         ? 'bg-danger-soft/60 hover:bg-danger-soft'
                         : 'bg-surface-muted hover:bg-primary-50')
