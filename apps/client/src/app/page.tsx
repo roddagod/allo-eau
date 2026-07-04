@@ -181,7 +181,7 @@ export default async function HomePage() {
         {/* ===================== TARIFS ===================== */}
         <section id="tarifs" className="border-b border-slate-200 bg-white">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-sm font-semibold uppercase tracking-widest text-primary">
                 Tarifs officiels
               </p>
@@ -235,7 +235,7 @@ export default async function HomePage() {
           }}
         >
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-sm font-semibold uppercase tracking-widest text-primary">
                 Grand Libreville
               </p>
@@ -274,7 +274,7 @@ export default async function HomePage() {
         {/* ===================== PARTENAIRES ===================== */}
         <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-sm font-semibold uppercase tracking-widest text-primary">
                 Opérateurs partenaires
               </p>
@@ -305,7 +305,7 @@ export default async function HomePage() {
         {/* ===================== NUMÉROS VERTS ===================== */}
         <section id="urgence" className="bg-primary text-white">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-sm font-semibold uppercase tracking-widest text-accent">
                 Cinq numéros verts
               </p>

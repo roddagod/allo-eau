@@ -89,14 +89,14 @@ export default async function NouvellesMesuresPage() {
       <main id="main">
         {/* Hero */}
         <section className="bg-primary text-white">
-          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="mx-auto max-w-4xl px-4 py-12 text-center sm:px-6 lg:px-8 lg:py-16">
             <p className="text-xs font-semibold uppercase tracking-widest text-accent">
               Communiqués officiels du Ministère
             </p>
             <h1 className="mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
               Les nouvelles mesures
             </h1>
-            <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
+            <p className="mx-auto mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
               Ensemble des dispositions prises par le Gouvernement dans le cadre de l’état
               d’urgence hydrique déclaré pour le Grand Libreville.
             </p>
@@ -106,7 +106,7 @@ export default async function NouvellesMesuresPage() {
         {/* Communiqués */}
         <section className="bg-white">
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                 Historique
               </p>
@@ -153,7 +153,7 @@ export default async function NouvellesMesuresPage() {
         {/* Tarifs officiels en vigueur */}
         <section className="border-t border-surface-border bg-primary-50">
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                 En vigueur depuis le 02/07/2026
               </p>
@@ -199,7 +199,7 @@ export default async function NouvellesMesuresPage() {
         {/* Numéros verts */}
         <section className="border-t border-surface-border bg-white">
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-            <div className="max-w-2xl">
+            <div className="mx-auto max-w-2xl text-center">
               <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                 Assistance
               </p>
