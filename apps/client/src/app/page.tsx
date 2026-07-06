@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createServerClient } from '@eaupourtous/db/server';
 import { getUser } from '@eaupourtous/db/get-user';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
@@ -117,39 +118,56 @@ export default async function HomePage() {
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-8 lg:pt-20 lg:pb-24">
-            <div className="max-w-2xl">
-              {/* Titre principal — plus serré, plus imposant */}
-              <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                De l’eau potable,
-                <br className="hidden sm:block" />
-                <span className="text-white">livrée à votre porte.</span>
-              </h1>
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-16">
+              <div className="max-w-2xl">
+                {/* Titre principal — plus serré, plus imposant */}
+                <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+                  De l’eau potable,
+                  <br className="hidden sm:block" />
+                  <span className="text-white">livrée à votre porte.</span>
+                </h1>
 
-              {/* Divider or */}
-              <span aria-hidden className="mt-6 block h-[3px] w-14 rounded-full bg-[#FCD116]" />
+                {/* Divider or */}
+                <span aria-hidden className="mt-6 block h-[3px] w-14 rounded-full bg-[#FCD116]" />
 
-              {/* Sous-titre — deux points d'ancrage clairs */}
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
-                Dispositif du Ministère de l’Accès Universel à l’Eau et à l’Énergie.
-                Livraison à tarif réglementé, assurée par les Forces de Défense et de Sécurité.
-              </p>
+                {/* Sous-titre — deux points d'ancrage clairs */}
+                <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
+                  Livraison à tarif réglementé, assurée par les Forces de Défense et de Sécurité.
+                </p>
 
-              {/* CTAs */}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Link
-                  href="/commander"
-                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-accent px-6 text-base font-semibold text-white shadow-sm transition-colors hover:bg-accent-700 focus-visible:outline-none sm:min-h-[56px]"
-                >
-                  Commander maintenant
-                  <ArrowRightIcon className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="/nouvelles-mesures"
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-white/25 px-6 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none sm:min-h-[56px]"
-                >
-                  Mesures officielles
-                </Link>
+                {/* CTAs */}
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <Link
+                    href="/commander"
+                    className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-accent px-6 text-base font-semibold text-white shadow-sm transition-colors hover:bg-accent-700 focus-visible:outline-none sm:min-h-[56px]"
+                  >
+                    Commander maintenant
+                    <ArrowRightIcon className="h-5 w-5" />
+                  </Link>
+                  <Link
+                    href="/nouvelles-mesures"
+                    className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-white/25 px-6 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none sm:min-h-[56px]"
+                  >
+                    Mesures officielles
+                  </Link>
+                </div>
               </div>
+
+              {/* Cartouche officielle — logo Ministère sur fond blanc net */}
+              <aside
+                className="order-first mx-auto flex w-fit shrink-0 items-center justify-center rounded-lg bg-white p-4 shadow-lg sm:p-5 lg:order-none lg:mx-0"
+                aria-label="Ministère de l’Accès Universel à l’Eau et à l’Énergie"
+              >
+                <Image
+                  src="/institution/ministere-eau-energie.png"
+                  alt="Ministère de l’Accès Universel à l’Eau et à l’Énergie — République Gabonaise"
+                  width={361}
+                  height={326}
+                  priority
+                  sizes="(min-width: 1024px) 220px, 160px"
+                  className="h-auto w-40 lg:w-[220px]"
+                />
+              </aside>
             </div>
           </div>
         </section>
