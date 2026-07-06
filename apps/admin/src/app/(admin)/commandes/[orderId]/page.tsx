@@ -5,6 +5,7 @@ import { formatFcfa } from '@eaupourtous/domain/pricing';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 import { ReassignPanel } from './reassign-panel';
 import { AcceptRefusePanel } from './accept-refuse-panel';
+import { AssignDriverPanel } from './assign-driver-panel';
 import { MapPinIcon, PhoneIcon, ClockIcon } from '@/components/icons';
 
 export const dynamic = 'force-dynamic';
@@ -26,12 +27,20 @@ type OrderDetail = {
   payment_status: string;
   dispatch_attempts: number;
   refused_company_ids: string[];
+  driver_id: string | null;
   companies: { commercial_name: string; phone: string | null } | null;
   zones: { name: string; sector: string | null } | null;
   client_snapshot: { first_name?: string; last_name?: string; phone?: string } | null;
 };
 
 type EligibleCompany = { id: string; commercial_name: string; operator_type: string };
+
+type DriverPickerRow = {
+  id: string;
+  reference: string | null;
+  status: 'available' | 'on_delivery' | 'off_duty' | 'suspended';
+  profile: { first_name: string | null; last_name: string | null } | null;
+};
 
 const statusPill: Record<OrderStatus, string> = {
   pending:         'bg-primary-50 text-primary',
@@ -61,7 +70,7 @@ export default async function OrderDetailAdminPage({
       volume_liters, quantity, unit_price_fcfa, total_amount_fcfa,
       address, delivery_landmark, client_instructions,
       payment_method, payment_status,
-      dispatch_attempts, refused_company_ids, client_snapshot,
+      dispatch_attempts, refused_company_ids, client_snapshot, driver_id,
       companies (commercial_name, phone),
       zones (name, sector)
     `)
@@ -69,6 +78,50 @@ export default async function OrderDetailAdminPage({
     .single<OrderDetail>();
 
   if (!order) notFound();
+
+  // Livreurs de la société attribuée (pour affectation manuelle)
+  const drivers: DriverPickerRow[] = order.company_id
+    ? (await supabase
+        .from('drivers')
+        .select(`
+          id, reference, status,
+          profile:profiles!drivers_id_fkey (first_name, last_name)
+        `)
+        .eq('company_id', order.company_id)
+        .neq('status', 'suspended')
+        .returns<DriverPickerRow[]>()).data ?? []
+    : [];
+
+  // Charge active par livreur (pour tri UI dans le picker)
+  const activeCounts = new Map<string, number>();
+  if (drivers.length > 0) {
+    const { data: active } = await supabase
+      .from('orders')
+      .select('driver_id')
+      .in('driver_id', drivers.map((d) => d.id))
+      .in('order_status', ['driver_assigned', 'driver_en_route', 'arrived_nearby'])
+      .returns<{ driver_id: string }[]>();
+    for (const row of active ?? []) {
+      activeCounts.set(row.driver_id, (activeCounts.get(row.driver_id) ?? 0) + 1);
+    }
+  }
+
+  const driverOptions = drivers
+    .map((d) => ({
+      id: d.id,
+      reference: d.reference,
+      name: [d.profile?.first_name, d.profile?.last_name].filter(Boolean).join(' ') || 'Livreur',
+      status: d.status,
+      activeOrders: activeCounts.get(d.id) ?? 0,
+    }))
+    .sort((a, b) => {
+      // Disponibles d'abord, puis charge croissante
+      if (a.status !== b.status) {
+        const rank = { available: 0, on_delivery: 1, off_duty: 2, suspended: 3 } as const;
+        return rank[a.status] - rank[b.status];
+      }
+      return a.activeOrders - b.activeOrders;
+    });
 
   // Sociétés éligibles pour réassignation manuelle : couvrant la zone, active, hors précédemment refusées
   const { data: eligibleData } = await supabase
@@ -147,10 +200,23 @@ export default async function OrderDetailAdminPage({
 
             <div className="mt-6 border-t border-surface-border pt-5">
               <p className="text-xs font-semibold uppercase tracking-widest text-ink-subtle">
-                Réassignation manuelle
+                Réassignation société
               </p>
               <ReassignPanel orderId={order.id} candidates={eligible} />
             </div>
+
+            {order.company_id && (
+              <div className="mt-6 border-t border-surface-border pt-5">
+                <p className="text-xs font-semibold uppercase tracking-widest text-ink-subtle">
+                  Attribution livreur
+                </p>
+                <AssignDriverPanel
+                  orderId={order.id}
+                  drivers={driverOptions}
+                  currentDriverId={order.driver_id}
+                />
+              </div>
+            )}
           </section>
 
           {/* Détails livraison */}

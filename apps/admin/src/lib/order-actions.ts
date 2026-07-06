@@ -61,6 +61,79 @@ export async function acceptOrderAction(orderId: string): Promise<ActionResult> 
 }
 
 /**
+ * Réaffectation manuelle à un livreur spécifique.
+ * Écrase l'auto-assign : si l'admin veut donner la commande à un livreur précis,
+ * on met `driver_id` et on passe le statut à `driver_assigned` si nécessaire.
+ * Une entrée est écrite dans `logs` pour traçabilité.
+ */
+export async function reassignOrderToDriverAction(
+  orderId: string,
+  driverId: string,
+): Promise<ActionResult> {
+  const supabase = await createServerClient();
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+  if (!user) return { ok: false, message: 'Session expirée.' };
+
+  // Récupère la commande + la société attendue du livreur (vérif cohérence)
+  const [{ data: order }, { data: driver }] = await Promise.all([
+    supabase
+      .from('orders')
+      .select('id, company_id, driver_id, order_status')
+      .eq('id', orderId)
+      .single<{ id: string; company_id: string | null; driver_id: string | null; order_status: string }>(),
+    supabase
+      .from('drivers')
+      .select('id, company_id, status, reference')
+      .eq('id', driverId)
+      .single<{ id: string; company_id: string; status: string; reference: string | null }>(),
+  ]);
+
+  if (!order) return { ok: false, message: 'Commande introuvable.' };
+  if (!driver) return { ok: false, message: 'Livreur introuvable.' };
+  if (driver.status === 'suspended') {
+    return { ok: false, message: 'Ce livreur est suspendu.' };
+  }
+  if (order.company_id && order.company_id !== driver.company_id) {
+    return {
+      ok: false,
+      message: 'Ce livreur n’appartient pas à la société attribuée à la commande.',
+    };
+  }
+
+  // Statuts terminaux : refus
+  if (['delivered', 'cancelled', 'refused'].includes(order.order_status)) {
+    return { ok: false, message: 'Commande déjà cloturée.' };
+  }
+
+  const shouldBumpStatus = order.order_status === 'accepted' || order.order_status === 'pending';
+
+  const { error: updErr } = await supabase
+    .from('orders')
+    .update({
+      driver_id: driverId,
+      order_status: shouldBumpStatus ? 'driver_assigned' : undefined,
+    })
+    .eq('id', orderId);
+  if (updErr) return { ok: false, message: updErr.message };
+
+  await supabase.from('logs').insert({
+    user_id: user.id,
+    action: 'order.assign_driver',
+    module: 'orders',
+    description: `Réaffectation manuelle au livreur ${driver.reference ?? driverId}`,
+    target_id: orderId,
+    company_id: driver.company_id,
+    is_sensitive: true,
+  });
+
+  revalidatePath(`/commandes/${orderId}`);
+  revalidatePath('/commandes');
+  revalidatePath('/carte');
+  return { ok: true };
+}
+
+/**
  * Refuser une commande (déclenche le trigger de cascade côté DB).
  */
 export async function refuseOrderAction(
