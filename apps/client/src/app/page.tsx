@@ -118,14 +118,8 @@ export default async function HomePage() {
 
           <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-8 lg:pt-20 lg:pb-24">
             <div className="max-w-2xl">
-              {/* Eyebrow */}
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/90 sm:text-xs">
-                <span className="h-1 w-1 rounded-full bg-[#FCD116]" aria-hidden />
-                Plateforme officielle
-              </p>
-
               {/* Titre principal — plus serré, plus imposant */}
-              <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                 De l’eau potable,
                 <br className="hidden sm:block" />
                 <span className="text-white">livrée à votre porte.</span>
@@ -156,42 +150,7 @@ export default async function HomePage() {
                   Mesures officielles
                 </Link>
               </div>
-
-              {!user && (
-                <p className="mt-4 flex items-center gap-2 text-[13px] text-white/70">
-                  <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-white/40" />
-                  Sans compte — commande validée par un code SMS
-                </p>
-              )}
             </div>
-
-            {/* KPIs — bandeau institutionnel bas de hero */}
-            <dl className="mt-12 grid grid-cols-3 divide-x divide-white/15 border-t border-white/15 pt-6 sm:mt-16 sm:max-w-2xl">
-              <div className="px-4 first:pl-0">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
-                  1 000 L
-                </dt>
-                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
-                  4 000 <span className="text-sm font-medium text-white/70 sm:text-base">FCFA</span>
-                </dd>
-              </div>
-              <div className="px-4">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
-                  Quartiers
-                </dt>
-                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
-                  {zones.length}
-                </dd>
-              </div>
-              <div className="px-4">
-                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
-                  Livraison
-                </dt>
-                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
-                  Incluse
-                </dd>
-              </div>
-            </dl>
           </div>
         </section>
 
