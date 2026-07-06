@@ -241,9 +241,9 @@ export default async function HomePage() {
             </div>
 
             <p className="mt-6 max-w-3xl text-xs text-slate-500">
-              Le tarif de la cuve de 1 000 L a été fixé à 3 000 FCFA par le dispositif d’urgence
-              hydrique, contre 10 000 FCFA avant le décret. Les tarifs des autres paliers restent
-              en cours de validation par le ministère.
+              Le tarif de la cuve de 1 000 L a été fixé à 4 000 FCFA par le dispositif d’urgence
+              hydrique. Les tarifs des autres paliers restent en cours de validation par le
+              ministère.
             </p>
           </div>
         </section>
