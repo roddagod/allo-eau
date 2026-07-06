@@ -86,51 +86,110 @@ export default async function HomePage() {
       <main id="main">
         {/* ===================== HERO ===================== */}
         <section className="relative overflow-hidden bg-primary text-white">
-          <div className="mx-auto max-w-4xl px-4 py-10 text-center sm:px-6 lg:px-8 lg:py-14">
-            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              De l’eau potable, livrée à votre porte.
-            </h1>
+          {/* Motif subtil — points diagonaux (imprim' institutionnelle, pas SaaS) */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 1px 1px, rgba(255,255,255,1) 1px, transparent 0)',
+              backgroundSize: '18px 18px',
+            }}
+          />
 
-            <p className="mx-auto mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
-              La plateforme officielle du Ministère de l’Accès Universel à l’Eau et à l’Énergie
-              pour commander une cuve à tarif réglementé, livraison assurée par les Forces de
-              Défense et de Sécurité.
-            </p>
+          {/* Barre officielle République Gabonaise */}
+          <div className="relative border-b border-white/10">
+            <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
+              <span aria-hidden className="flex h-3.5 w-3.5 flex-col overflow-hidden rounded-[2px]">
+                <span className="flex-1 bg-[#009E60]" />
+                <span className="flex-1 bg-[#FCD116]" />
+                <span className="flex-1 bg-[#3A75C4]" />
+              </span>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 sm:text-xs">
+                République Gabonaise
+              </p>
+              <span className="ml-auto flex items-center gap-1.5 text-[10px] font-medium text-white/60 sm:text-xs">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#FCD116]" />
+                <span className="hidden sm:inline">État d’urgence hydrique · </span>
+                <span>02 juillet 2026</span>
+              </span>
+            </div>
+          </div>
 
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link
-                href="/commander"
-                className="inline-flex min-h-touch items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-accent-700 focus-visible:outline-none"
-              >
-                Commander maintenant
-                <ArrowRightIcon className="h-5 w-5" />
-              </Link>
-              <Link
-                href="/nouvelles-mesures"
-                className="inline-flex min-h-touch items-center justify-center rounded-lg border border-white/30 bg-transparent px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none"
-              >
-                Nouvelles mesures
-              </Link>
+          <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-8 lg:pt-20 lg:pb-24">
+            <div className="max-w-2xl">
+              {/* Eyebrow */}
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/90 sm:text-xs">
+                <span className="h-1 w-1 rounded-full bg-[#FCD116]" aria-hidden />
+                Plateforme officielle
+              </p>
+
+              {/* Titre principal — plus serré, plus imposant */}
+              <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+                De l’eau potable,
+                <br className="hidden sm:block" />
+                <span className="text-white">livrée à votre porte.</span>
+              </h1>
+
+              {/* Divider or */}
+              <span aria-hidden className="mt-6 block h-[3px] w-14 rounded-full bg-[#FCD116]" />
+
+              {/* Sous-titre — deux points d'ancrage clairs */}
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
+                Dispositif du Ministère de l’Accès Universel à l’Eau et à l’Énergie.
+                Livraison à tarif réglementé, assurée par les Forces de Défense et de Sécurité.
+              </p>
+
+              {/* CTAs */}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link
+                  href="/commander"
+                  className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-accent px-6 text-base font-semibold text-white shadow-sm transition-colors hover:bg-accent-700 focus-visible:outline-none sm:min-h-[56px]"
+                >
+                  Commander maintenant
+                  <ArrowRightIcon className="h-5 w-5" />
+                </Link>
+                <Link
+                  href="/nouvelles-mesures"
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-white/25 px-6 text-base font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none sm:min-h-[56px]"
+                >
+                  Mesures officielles
+                </Link>
+              </div>
+
+              {!user && (
+                <p className="mt-4 flex items-center gap-2 text-[13px] text-white/70">
+                  <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-white/40" />
+                  Sans compte — commande validée par un code SMS
+                </p>
+              )}
             </div>
 
-            {!user && (
-              <p className="mt-4 text-xs text-white/70">
-                Sans compte : commande validée par un code SMS.
-              </p>
-            )}
-
-            <dl className="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-white/15 pt-6 text-sm">
-              <div>
-                <dt className="text-white/60">Cuve 1 000 L</dt>
-                <dd className="mt-1 text-xl font-bold">4 000 FCFA</dd>
+            {/* KPIs — bandeau institutionnel bas de hero */}
+            <dl className="mt-12 grid grid-cols-3 divide-x divide-white/15 border-t border-white/15 pt-6 sm:mt-16 sm:max-w-2xl">
+              <div className="px-4 first:pl-0">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
+                  1 000 L
+                </dt>
+                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
+                  4 000 <span className="text-sm font-medium text-white/70 sm:text-base">FCFA</span>
+                </dd>
               </div>
-              <div>
-                <dt className="text-white/60">Quartiers</dt>
-                <dd className="mt-1 text-xl font-bold">{zones.length}</dd>
+              <div className="px-4">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
+                  Quartiers
+                </dt>
+                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
+                  {zones.length}
+                </dd>
               </div>
-              <div>
-                <dt className="text-white/60">Livraison</dt>
-                <dd className="mt-1 text-xl font-bold">Incluse</dd>
+              <div className="px-4">
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/60 sm:text-xs">
+                  Livraison
+                </dt>
+                <dd className="mt-1.5 font-display text-2xl font-bold sm:text-3xl">
+                  Incluse
+                </dd>
               </div>
             </dl>
           </div>
