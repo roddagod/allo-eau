@@ -27,7 +27,6 @@ export function BrandMark({
     md: 'text-base sm:text-lg',
     lg: 'text-xl sm:text-2xl',
   }[size];
-  const subLabel = { sm: 'text-[9px]', md: 'text-[10px]', lg: 'text-xs' }[size];
 
   const isDark = variant === 'dark';
 
@@ -43,25 +42,14 @@ export function BrandMark({
         className="shrink-0"
         style={{ width: logoSize, height: 'auto' }}
       />
-      <span className="flex flex-col justify-center leading-tight">
-        <span
-          className={cn(
-            'font-bold uppercase tracking-[0.18em]',
-            subLabel,
-            isDark ? 'text-white/70' : 'text-slate-500',
-          )}
-        >
-          République Gabonaise
-        </span>
-        <span
-          className={cn(
-            'font-bold uppercase tracking-[0.14em]',
-            mainLabel,
-            isDark ? 'text-white' : 'text-slate-900',
-          )}
-        >
-          Allô Eau
-        </span>
+      <span
+        className={cn(
+          'font-bold uppercase tracking-[0.14em]',
+          mainLabel,
+          isDark ? 'text-white' : 'text-slate-900',
+        )}
+      >
+        Allô Eau
       </span>
     </span>
   );

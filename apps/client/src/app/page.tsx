@@ -98,25 +98,6 @@ export default async function HomePage() {
             }}
           />
 
-          {/* Barre officielle République Gabonaise */}
-          <div className="relative border-b border-white/10">
-            <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 sm:px-6 lg:px-8">
-              <span aria-hidden className="flex h-3.5 w-3.5 flex-col overflow-hidden rounded-[2px]">
-                <span className="flex-1 bg-[#009E60]" />
-                <span className="flex-1 bg-[#FCD116]" />
-                <span className="flex-1 bg-[#3A75C4]" />
-              </span>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 sm:text-xs">
-                République Gabonaise
-              </p>
-              <span className="ml-auto flex items-center gap-1.5 text-[10px] font-medium text-white/60 sm:text-xs">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#FCD116]" />
-                <span className="hidden sm:inline">État d’urgence hydrique · </span>
-                <span>02 juillet 2026</span>
-              </span>
-            </div>
-          </div>
-
           <div className="relative mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 sm:pt-14 lg:px-8 lg:pt-20 lg:pb-24">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-16">
               <div className="max-w-2xl">
