@@ -83,10 +83,10 @@ export async function createDriverAction(_prev: ActionResult, formData: FormData
   if (drvErr) return { ok: false, message: `Drivers : ${drvErr.message}` };
 
   // 4) SMS avec les credentials
-  const driverAppUrl = (process.env.NEXT_PUBLIC_DRIVER_URL ?? 'https://livreur.allo-eau.ga').replace(/\/$/, '');
+  const driverAppUrl = (process.env.NEXT_PUBLIC_DRIVER_URL || 'https://livreur.allo-eau.ga').replace(/\/$/, '');
   await sendSms({
     to: phone,
-    text: `Allo Eau : votre compte livreur est cree. Connexion sur ${driverAppUrl.replace(/^https?:\/\//, '')} - email ${finalEmail} - mdp ${tempPassword}`,
+    text: `Allo Eau : votre compte livreur est cree. Connexion sur ${driverAppUrl} - email ${finalEmail} - mdp ${tempPassword}`,
   });
 
   // 5) Log

@@ -238,10 +238,10 @@ export async function verifyGuestOtpAction(
   }
 
   // SMS de confirmation avec short link
-  const siteHost = (process.env.NEXT_PUBLIC_CLIENT_URL ?? 'https://allo-eau.ga').replace(/^https?:\/\//, '');
+  const siteUrl = process.env.NEXT_PUBLIC_CLIENT_URL || 'https://allo-eau.ga';
   await sendSms({
     to: challenge.phone,
-    text: `Allo Eau : commande ${order.reference} enregistree. Suivi : ${siteHost}/s/${order.short_code}`,
+    text: `Allo Eau : commande ${order.reference} enregistree. Suivi : ${siteUrl}/s/${order.short_code}`,
   });
 
   redirect(`/suivre/${order.id}?t=${order.guest_access_token}`);
