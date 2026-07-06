@@ -42,6 +42,31 @@ const paymentLabels = {
   clickpay:     'ClickPay',
 } as const;
 
+const TIME_SLOTS = [
+  { value: '08:00', label: 'Matin',      range: '8h — 12h' },
+  { value: '13:00', label: 'Après-midi', range: '13h — 17h' },
+  { value: '17:00', label: 'Soir',       range: '17h — 20h' },
+] as const;
+
+function getDateOptions(): { value: string; label: string; date: string }[] {
+  const opts: { value: string; label: string; date: string }[] = [];
+  const today = new Date();
+  const formatIso = (d: Date) => d.toISOString().slice(0, 10);
+  const formatShort = (d: Date) =>
+    d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+  const labels = ['Aujourd’hui', 'Demain', 'Après-demain', 'Dans 3 j'];
+  for (let i = 0; i < 4; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    opts.push({
+      value: formatIso(d),
+      label: labels[i] ?? formatShort(d),
+      date: formatShort(d),
+    });
+  }
+  return opts;
+}
+
 const INITIAL_SEND: SendOtpState = { step: 'form', ok: true };
 const INITIAL_VERIFY: VerifyOtpState = { ok: true };
 const INITIAL_AUTH: OrderActionState = { ok: true };
@@ -139,6 +164,13 @@ export function OrderFlow(props: {
         phoneMasked={sendState.phoneMasked}
       />
     );
+  }
+
+  // Pendant l'envoi du SMS (mode guest), on remplace la vue schedule par un
+  // panneau explicite "Envoi en cours" pour éviter l'impression d'écran figé
+  // le temps de l'appel Wirepick.
+  if (mode === 'guest' && sending) {
+    return <SendingStep phone={phone} />;
   }
 
   const currentIdx = steps.findIndex((s) => s.id === step);
@@ -372,15 +404,57 @@ export function OrderFlow(props: {
               title="Créneau et paiement"
               description="Choisissez le créneau souhaité et le moyen de paiement."
             />
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="dt">Date souhaitée</Label>
-                <Input id="dt" type="date" value={preferredDeliveryDate} onChange={(e) => setPreferredDeliveryDate(e.target.value)} min={new Date().toISOString().slice(0, 10)} />
+            <div>
+              <Label>Date de livraison</Label>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {getDateOptions().map((opt) => {
+                  const active = preferredDeliveryDate === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setPreferredDeliveryDate(opt.value)}
+                      className={
+                        'flex min-h-touch flex-col items-center justify-center rounded-xl border-2 px-2 py-2 text-center transition ' +
+                        (active
+                          ? 'border-primary bg-primary-50'
+                          : 'border-surface-border bg-white hover:border-primary-200')
+                      }
+                    >
+                      <span className="text-xs uppercase tracking-widest text-ink-subtle">{opt.label}</span>
+                      <span className="mt-0.5 text-sm font-semibold text-ink">{opt.date}</span>
+                    </button>
+                  );
+                })}
               </div>
-              <div>
-                <Label htmlFor="tm">Heure souhaitée</Label>
-                <Input id="tm" type="time" value={preferredDeliveryTime} onChange={(e) => setPreferredDeliveryTime(e.target.value)} />
+            </div>
+
+            <div>
+              <Label>Créneau de livraison</Label>
+              <div className="grid grid-cols-3 gap-2">
+                {TIME_SLOTS.map((slot) => {
+                  const active = preferredDeliveryTime === slot.value;
+                  return (
+                    <button
+                      key={slot.value}
+                      type="button"
+                      onClick={() => setPreferredDeliveryTime(slot.value)}
+                      className={
+                        'flex min-h-touch flex-col items-center justify-center rounded-xl border-2 px-2 py-2 text-center transition ' +
+                        (active
+                          ? 'border-primary bg-primary-50'
+                          : 'border-surface-border bg-white hover:border-primary-200')
+                      }
+                    >
+                      <span className="text-sm font-semibold text-ink">{slot.label}</span>
+                      <span className="mt-0.5 text-[11px] text-ink-muted">{slot.range}</span>
+                    </button>
+                  );
+                })}
               </div>
+              <p className="mt-1 text-xs text-ink-subtle">
+                Le livreur vous appellera avant son passage. Un créneau est facultatif.
+              </p>
             </div>
             <div>
               <Label htmlFor="pm" required>Moyen de paiement</Label>
@@ -429,6 +503,34 @@ export function OrderFlow(props: {
         )}
       </div>
     </form>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Écran transitoire — envoi du SMS en cours (mode guest)
+// ---------------------------------------------------------------------------
+
+function SendingStep({ phone }: { phone: string }) {
+  // Masquage rapide côté client (identique à maskPhone côté serveur)
+  const cleaned = phone.replace(/\D/g, '');
+  const masked = cleaned.length >= 8
+    ? `07 XX XX ${cleaned.slice(-3)}`
+    : phone;
+
+  return (
+    <section className="rounded-2xl border border-surface-border bg-white p-6 text-center sm:p-8">
+      <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary">
+        <PhoneIcon className="h-6 w-6" />
+      </span>
+      <h2 className="mt-4 text-xl font-bold text-ink">Envoi du code de vérification…</h2>
+      <p className="mt-2 text-sm text-ink-muted">
+        Nous envoyons un SMS au <span className="font-semibold text-ink">{masked}</span>.
+      </p>
+      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-ink-subtle">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+        <span>Cette étape prend quelques secondes.</span>
+      </div>
+    </section>
   );
 }
 

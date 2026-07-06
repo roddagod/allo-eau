@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import maplibregl, { Map, Marker, type LngLatLike } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { createBrowserClient } from '@eaupourtous/db/browser';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import type { OrderStatus } from '@eaupourtous/domain/order-status';
 
 export type OrderMarker = {
@@ -355,7 +356,7 @@ export function MapView({
               href={`tel:${selected.data.phone}`}
               className="mt-2 block truncate text-xs font-medium text-primary underline"
             >
-              {selected.data.phone}
+              {formatGabonPhoneDisplay(selected.data.phone, { pretty: true })}
             </a>
           )}
           <p className="mt-2 text-[11px] text-ink-subtle">

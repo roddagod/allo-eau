@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@eaupourtous/db/server';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 import { ReassignPanel } from './reassign-panel';
 import { AcceptRefusePanel } from './accept-refuse-panel';
@@ -183,7 +184,7 @@ export default async function OrderDetailAdminPage({
                     </p>
                     {order.companies.phone && (
                       <a href={`tel:${order.companies.phone}`} className="mt-1 inline-block text-sm text-primary underline">
-                        {order.companies.phone}
+                        {formatGabonPhoneDisplay(order.companies.phone, { pretty: true })}
                       </a>
                     )}
                   </div>
@@ -235,7 +236,7 @@ export default async function OrderDetailAdminPage({
               <div className="flex gap-3">
                 <PhoneIcon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <a href={`tel:${order.client_snapshot.phone}`} className="text-sm font-medium text-primary underline">
-                  {order.client_snapshot.phone}
+                  {formatGabonPhoneDisplay(order.client_snapshot.phone, { pretty: true })}
                 </a>
               </div>
             )}

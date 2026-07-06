@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createAdminClient } from '@eaupourtous/db/admin';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import {
   ORDER_STATUSES,
   ORDER_STATUS_LABELS,
@@ -215,7 +216,7 @@ export default async function TrackOrderPage({
             <div className="flex gap-3">
               <PhoneIcon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <a href={`tel:${order.companies.phone}`} className="text-sm font-medium text-primary underline">
-                {order.companies.phone}
+                {formatGabonPhoneDisplay(order.companies.phone, { pretty: true })}
               </a>
             </div>
           )}

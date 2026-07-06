@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@eaupourtous/db/server';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 import { MapPinIcon, PhoneIcon, ClockIcon, BuildingIcon } from '@/components/icons';
 import { DriverEditForm } from './driver-edit-form';
@@ -323,7 +324,7 @@ export default async function DriverDetailPage({
                 <div className="flex items-center gap-2">
                   <PhoneIcon className="h-4 w-4 text-primary" />
                   <a href={`tel:${driver.profile.phone}`} className="text-sm font-medium text-primary underline">
-                    {driver.profile.phone}
+                    {formatGabonPhoneDisplay(driver.profile.phone, { pretty: true })}
                   </a>
                 </div>
               )}

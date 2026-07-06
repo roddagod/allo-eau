@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createServerClient } from '@eaupourtous/db/server';
 import { getUser } from '@eaupourtous/db/get-user';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { UsersIcon, BuildingIcon, ArrowRightIcon } from '@/components/icons';
 
 export const dynamic = 'force-dynamic';
@@ -98,7 +99,9 @@ export default async function DriversListPage() {
                         </p>
                         <p className="mt-0.5 font-semibold text-ink">{name}</p>
                         {d.profile?.phone && (
-                          <p className="mt-0.5 text-xs text-ink-muted">{d.profile.phone}</p>
+                          <p className="mt-0.5 text-xs text-ink-muted">
+                            {formatGabonPhoneDisplay(d.profile.phone, { pretty: true })}
+                          </p>
                         )}
                         <p className="mt-1 flex items-center gap-1 text-xs text-ink-subtle">
                           <BuildingIcon className="h-3 w-3" />
