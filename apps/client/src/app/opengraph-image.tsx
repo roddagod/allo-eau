@@ -39,10 +39,11 @@ export default async function Image() {
         </div>
 
         {/* Titre principal */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
-              display: 'inline-block',
+              display: 'flex',
+              alignSelf: 'flex-start',
               background: '#009E60',
               color: '#FFFFFF',
               fontSize: 20,
