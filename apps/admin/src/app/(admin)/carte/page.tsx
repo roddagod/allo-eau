@@ -35,11 +35,40 @@ const DRIVER_STATUS_LABEL: Record<DriverStatus, string> = {
   suspended:   'Suspendu',
 };
 
-function parseWkt(wkt: string | null): [number, number] | null {
-  if (!wkt) return null;
-  const m = wkt.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i);
-  if (!m) return null;
-  return [Number(m[1]), Number(m[2])];
+/**
+ * Décode un point PostGIS renvoyé par Supabase.
+ * Accepte deux formats :
+ *  - WKT texte : `POINT(9.45 0.42)` (si on passe par ST_AsText en vue)
+ *  - hex EWKB : `0101000020E6100000...` (format par défaut PostgREST)
+ * Retourne `[lng, lat]`.
+ */
+function parseGeoPoint(raw: string | null): [number, number] | null {
+  if (!raw) return null;
+
+  // Format WKT
+  const wkt = raw.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i);
+  if (wkt) return [Number(wkt[1]), Number(wkt[2])];
+
+  // Format hex EWKB — 50 caractères pour un Point + SRID (little-endian)
+  //   1 octet endian + 4 octets type + 4 octets SRID + 8 octets X + 8 octets Y
+  if (/^[0-9a-fA-F]+$/.test(raw) && raw.length >= 50) {
+    try {
+      const bytes = new Uint8Array(raw.length / 2);
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(raw.substr(i * 2, 2), 16);
+      }
+      const view = new DataView(bytes.buffer);
+      const little = bytes[0] === 1;
+      // offset 9 = X (lng), offset 17 = Y (lat)
+      const lng = view.getFloat64(9, little);
+      const lat = view.getFloat64(17, little);
+      if (Number.isFinite(lng) && Number.isFinite(lat)) return [lng, lat];
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
 
 export default async function CartePage() {
@@ -83,7 +112,7 @@ export default async function CartePage() {
 
   const orderMarkers: OrderMarker[] = (ordersRes.data ?? [])
     .map((o) => {
-      const coord = parseWkt(o.delivery_point);
+      const coord = parseGeoPoint(o.delivery_point);
       if (!coord) return null;
       return {
         id: o.id,
@@ -104,7 +133,7 @@ export default async function CartePage() {
   const now = Date.now();
   const driverMarkers: DriverMarker[] = (driversRes.data ?? [])
     .map((d) => {
-      const coord = parseWkt(d.current_location);
+      const coord = parseGeoPoint(d.current_location);
       if (!coord) return null;
       const name = [d.profile?.first_name, d.profile?.last_name].filter(Boolean).join(' ') || 'Livreur';
       const updatedAgoMin = d.location_updated_at

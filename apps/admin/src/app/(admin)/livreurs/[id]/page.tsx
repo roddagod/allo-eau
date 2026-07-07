@@ -56,11 +56,30 @@ const STATUS_PILL: Record<DriverStatus, string> = {
 
 const ACTIVE_STATUSES: OrderStatus[] = ['driver_assigned', 'driver_en_route', 'arrived_nearby'];
 
-function parseWkt(wkt: string | null): [number, number] | null {
-  if (!wkt) return null;
-  const m = wkt.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i);
-  if (!m) return null;
-  return [Number(m[1]), Number(m[2])];
+/**
+ * Décode un point PostGIS renvoyé par Supabase (WKT texte OU hex EWKB).
+ * PostgREST retourne par défaut le format hex EWKB pour geography(Point).
+ */
+function parseGeoPoint(raw: string | null): [number, number] | null {
+  if (!raw) return null;
+  const wkt = raw.match(/POINT\s*\(\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*\)/i);
+  if (wkt) return [Number(wkt[1]), Number(wkt[2])];
+  if (/^[0-9a-fA-F]+$/.test(raw) && raw.length >= 50) {
+    try {
+      const bytes = new Uint8Array(raw.length / 2);
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(raw.substr(i * 2, 2), 16);
+      }
+      const view = new DataView(bytes.buffer);
+      const little = bytes[0] === 1;
+      const lng = view.getFloat64(9, little);
+      const lat = view.getFloat64(17, little);
+      if (Number.isFinite(lng) && Number.isFinite(lat)) return [lng, lat];
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 function minutesAgo(iso: string | null): number | null {
@@ -152,7 +171,7 @@ export default async function DriverDetailPage({
   const totalLitersActive = active.reduce((s, o) => s + o.quantity * o.volume_liters, 0);
   const totalLitersWeek = history.reduce((s, o) => s + o.quantity * o.volume_liters, 0);
 
-  const coord = parseWkt(driver.current_location);
+  const coord = parseGeoPoint(driver.current_location);
   const posMinAgo = minutesAgo(driver.location_updated_at);
   const posLive = posMinAgo !== null && posMinAgo <= 3;
 
