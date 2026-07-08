@@ -55,8 +55,6 @@ export async function sendGuestOtpAction(
       : undefined;
 
   const draft: unknown = {
-    firstName:             formData.get('firstName'),
-    lastName:              formData.get('lastName'),
     phone:                 formData.get('phone'),
     zoneId:                formData.get('zoneId'),
     address:               formData.get('address'),
@@ -199,13 +197,11 @@ export async function verifyGuestOtpAction(
     .eq('id', challenge.id);
 
   // Création de la commande côté service_role (bypass RLS)
+  // Par principe d'anonymisation, on ne stocke que le numéro de téléphone.
   const draft = challenge.order_draft;
   const clientSnapshot = {
-    first_name: draft.firstName,
-    last_name:  draft.lastName,
-    phone:      challenge.phone,
-    email:      null,
-    guest:      true,
+    phone: challenge.phone,
+    guest: true,
   };
 
   const { data: order, error: orderError } = await admin

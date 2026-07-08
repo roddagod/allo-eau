@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createServerClient } from '@eaupourtous/db/server';
 import { getUser } from '@eaupourtous/db/get-user';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 import { StatusActions } from './status-actions';
 import { MapPinIcon, PhoneIcon, ClockIcon, DropletIcon } from '@/components/icons';
@@ -66,9 +67,7 @@ export default async function OrderDetailDriverPage({
 
   if (!order) notFound();
 
-  const clientName =
-    [order.client_snapshot?.first_name, order.client_snapshot?.last_name].filter(Boolean).join(' ') ||
-    'Client';
+  const clientPhone = order.client_snapshot?.phone ?? '';
   const gpsCoords = parseDeliveryPoint(order.delivery_point);
   const mapsUrl = gpsCoords
     ? `https://www.google.com/maps/dir/?api=1&destination=${gpsCoords}`
@@ -89,8 +88,7 @@ export default async function OrderDetailDriverPage({
           {order.quantity} × {order.volume_liters} L
         </h1>
         <p className="mt-1 text-sm text-white/70">
-          {clientName}
-          {order.zones?.name && <> · {order.zones.name}</>}
+          {order.zones?.name}
         </p>
         <div className="mt-3 flex items-center gap-3">
           <span className="rounded-full bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-200">
@@ -102,26 +100,23 @@ export default async function OrderDetailDriverPage({
         </div>
       </header>
 
-      {/* Client */}
-      <section className="space-y-3 rounded-lg bg-white/5 p-5">
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/50">Client</p>
-        <div className="flex items-start gap-3">
-          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/20 text-accent">
-            <PhoneIcon className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="font-medium">{clientName}</p>
-            {order.client_snapshot?.phone && (
-              <a
-                href={`tel:${order.client_snapshot.phone}`}
-                className="mt-0.5 inline-block text-sm text-accent underline"
-              >
-                {order.client_snapshot.phone}
-              </a>
-            )}
+      {/* Contact — numéro uniquement (anonymisation) */}
+      {clientPhone && (
+        <section className="space-y-3 rounded-lg bg-white/5 p-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-white/50">Contact</p>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/20 text-accent">
+              <PhoneIcon className="h-5 w-5" />
+            </span>
+            <a
+              href={`tel:${clientPhone}`}
+              className="text-lg font-semibold text-accent underline"
+            >
+              {formatGabonPhoneDisplay(clientPhone, { pretty: true })}
+            </a>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Adresse */}
       <section className="space-y-3 rounded-lg bg-white/5 p-5">

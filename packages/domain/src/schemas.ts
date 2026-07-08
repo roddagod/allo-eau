@@ -82,9 +82,8 @@ export const geoPointSchema = z.object({
 export type GeoPoint = z.infer<typeof geoPointSchema>;
 
 // Création de commande — parcours guest (sans compte)
+// Anonymisation : aucun nom/prénom, seul le numéro identifie le citoyen.
 export const guestOrderDraftSchema = z.object({
-  firstName:            z.string().min(1, 'Prénom requis').max(80),
-  lastName:             z.string().min(1, 'Nom requis').max(80),
   phone:                phoneSchema,
   zoneId:               z.string().uuid('Sélectionnez un quartier'),
   address:              z.string().min(1, 'Adresse requise').max(500),

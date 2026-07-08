@@ -193,7 +193,7 @@ export function OrderFlow(props: {
   }
 
   const canGoNext = (): boolean => {
-    if (step === 'contact')  return firstName.trim().length > 0 && lastName.trim().length > 0 && phone.trim().length >= 8;
+    if (step === 'contact')  return phone.trim().length >= 8;
     if (step === 'address')  return zoneId !== '' && address.trim().length > 0;
     if (step === 'volume')   return volumeLiters > 0 && quantity > 0;
     if (step === 'schedule') return paymentMethod !== undefined;
@@ -217,11 +217,7 @@ export function OrderFlow(props: {
 
       {/* Champs cachés — soumis avec le formulaire final */}
       {mode === 'guest' && (
-        <>
-          <input type="hidden" name="firstName" value={firstName} />
-          <input type="hidden" name="lastName" value={lastName} />
-          <input type="hidden" name="phone" value={phone} />
-        </>
+        <input type="hidden" name="phone" value={phone} />
       )}
       <input type="hidden" name="zoneId" value={zoneId} />
       <input type="hidden" name="address" value={address} />
@@ -241,32 +237,22 @@ export function OrderFlow(props: {
       )}
 
       <section className="rounded-2xl border border-surface-border bg-white p-5 sm:p-6">
-        {/* Étape Contact (guest uniquement) */}
+        {/* Étape Contact (guest uniquement) — juste le numéro */}
         {step === 'contact' && (
           <div className="space-y-4">
             <StepHeader
               index={stepIndex('contact')}
               total={steps.length}
-              title="Vos coordonnées"
-              description="Nous utiliserons ce numéro pour vous confirmer la commande et vous notifier des étapes."
+              title="Votre numéro de téléphone"
+              description="Nous n’avons besoin que de votre numéro. Aucun nom n’est demandé."
             />
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="fn" required>Prénom</Label>
-                <Input id="fn" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="given-name" required />
-                <FieldError message={err['firstName']} />
-              </div>
-              <div>
-                <Label htmlFor="ln" required>Nom</Label>
-                <Input id="ln" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" required />
-                <FieldError message={err['lastName']} />
-              </div>
-            </div>
             <div>
               <Label htmlFor="ph" required>Téléphone (Gabon)</Label>
               <Input id="ph" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="07 XX XX XX XX" autoComplete="tel" required />
               <FieldError message={err['phone']} />
-              <p className="mt-1 text-xs text-ink-subtle">Un code de vérification sera envoyé sur ce numéro.</p>
+              <p className="mt-1 text-xs text-ink-subtle">
+                Un code de vérification sera envoyé sur ce numéro. Il servira aussi à vous identifier pour le suivi de la commande.
+              </p>
             </div>
           </div>
         )}

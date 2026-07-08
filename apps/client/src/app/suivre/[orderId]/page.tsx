@@ -90,8 +90,6 @@ export default async function TrackOrderPage({
   const awaiting = order.company_id === null && order.order_status === 'pending';
   const cancelled = order.order_status === 'cancelled';
   const incident = order.order_status === 'incident';
-  const guestName = [order.client_snapshot?.first_name, order.client_snapshot?.last_name]
-    .filter(Boolean).join(' ');
 
   return (
     <div className="min-h-dvh bg-surface-muted">
@@ -110,7 +108,6 @@ export default async function TrackOrderPage({
             {order.quantity} × {order.volume_liters} L
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {guestName && <>{guestName} · </>}
             {order.zones?.name && <>Livraison à {order.zones.name}</>}
           </p>
         </header>

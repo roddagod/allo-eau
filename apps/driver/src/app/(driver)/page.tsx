@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createServerClient } from '@eaupourtous/db/server';
 import { getUser } from '@eaupourtous/db/get-user';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 import { DriverStatusToggle } from './driver-status-toggle';
 import { ClockIcon, MapPinIcon, ArrowRightIcon } from '@/components/icons';
@@ -140,9 +141,7 @@ export default async function DriverHomePage() {
       ) : (
         <ol className="space-y-3">
           {orders.map((o, i) => {
-            const clientName =
-              [o.client_snapshot?.first_name, o.client_snapshot?.last_name].filter(Boolean).join(' ') ||
-              'Client';
+            const clientPhone = o.client_snapshot?.phone ?? '';
             return (
               <li key={o.id}>
                 <Link
@@ -159,8 +158,13 @@ export default async function DriverHomePage() {
                           {o.reference}
                         </p>
                         <p className="mt-0.5 font-semibold">
-                          {o.quantity} × {o.volume_liters} L · {clientName}
+                          {o.quantity} × {o.volume_liters} L
                         </p>
+                        {clientPhone && (
+                          <p className="mt-0.5 font-mono text-[11px] text-white/70">
+                            {formatGabonPhoneDisplay(clientPhone, { pretty: true })}
+                          </p>
+                        )}
                         <p className="mt-1 flex items-center gap-1.5 text-xs text-white/70">
                           <MapPinIcon className="h-3.5 w-3.5" />
                           <span className="truncate">

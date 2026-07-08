@@ -173,7 +173,7 @@ async function fetchDashboard() {
       quantity: number;
       volume_liters: number;
       created_at: string;
-      client_snapshot: { first_name?: string; last_name?: string } | null;
+      client_snapshot: { phone?: string } | null;
       companies: { commercial_name: string } | null;
       zones: { name: string } | null;
     }[]) ?? []
@@ -184,9 +184,7 @@ async function fetchDashboard() {
     quantity: r.quantity,
     volumeLiters: r.volume_liters,
     createdAt: r.created_at,
-    clientName:
-      [r.client_snapshot?.first_name, r.client_snapshot?.last_name].filter(Boolean).join(' ') ||
-      null,
+    clientName: null,
     companyName: r.companies?.commercial_name ?? null,
     zoneName: r.zones?.name ?? null,
   }));

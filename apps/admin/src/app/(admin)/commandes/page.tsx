@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createServerClient } from '@eaupourtous/db/server';
 import { formatFcfa } from '@eaupourtous/domain/pricing';
+import { formatGabonPhoneDisplay } from '@eaupourtous/domain/phone';
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@eaupourtous/domain/order-status';
 
 export const dynamic = 'force-dynamic';
@@ -112,8 +113,7 @@ export default async function OrdersPage({
           {/* Cartes mobile */}
           <ul className="space-y-3 md:hidden">
             {orders.map((o) => {
-              const client = [o.client_snapshot?.first_name, o.client_snapshot?.last_name]
-                .filter(Boolean).join(' ') || '—';
+              const phone = o.client_snapshot?.phone;
               return (
                 <li key={o.id}>
                   <Link href={`/commandes/${o.id}`} className="block rounded-lg bg-white p-4 hover:bg-surface-muted">
@@ -121,7 +121,9 @@ export default async function OrdersPage({
                       <div className="min-w-0">
                         <p className="font-mono text-xs uppercase tracking-widest text-ink-subtle">{o.reference}</p>
                         <p className="mt-1 truncate font-semibold text-ink">{o.quantity} × {o.volume_liters} L</p>
-                        <p className="text-xs text-ink-muted">{client} · {o.zones?.name ?? '—'}</p>
+                        <p className="text-xs text-ink-muted">
+                          {phone ? formatGabonPhoneDisplay(phone, { pretty: true }) : '—'} · {o.zones?.name ?? '—'}
+                        </p>
                         <p className="mt-1 text-xs text-ink-subtle">
                           {o.companies?.commercial_name ?? (
                             <span className="text-primary">À attribuer</span>
@@ -146,8 +148,8 @@ export default async function OrdersPage({
             <table className="w-full text-left text-sm">
               <thead className="bg-surface-muted text-xs uppercase tracking-widest text-ink-subtle">
                 <tr>
-                  <th className="px-4 py-3">Référence</th>
-                  <th className="px-4 py-3">Client</th>
+                  <th className="px-4 py-3">Ticket</th>
+                  <th className="px-4 py-3">MSISDN</th>
                   <th className="px-4 py-3">Quartier</th>
                   <th className="px-4 py-3">Société</th>
                   <th className="px-4 py-3">Statut</th>
@@ -157,13 +159,14 @@ export default async function OrdersPage({
               </thead>
               <tbody>
                 {orders.map((o) => {
-                  const client = [o.client_snapshot?.first_name, o.client_snapshot?.last_name]
-                    .filter(Boolean).join(' ') || '—';
+                  const phone = o.client_snapshot?.phone;
                   return (
                     <tr key={o.id} className="hover:bg-surface-muted">
                       <td className="px-4 py-3 font-mono text-xs text-ink-muted">{o.reference}</td>
                       <td className="px-4 py-3">
-                        <div className="text-ink">{client}</div>
+                        <div className="font-mono text-ink">
+                          {phone ? formatGabonPhoneDisplay(phone, { pretty: true }) : '—'}
+                        </div>
                         <div className="text-xs text-ink-subtle">{o.quantity} × {o.volume_liters} L</div>
                       </td>
                       <td className="px-4 py-3 text-ink-muted">{o.zones?.name ?? '—'}</td>

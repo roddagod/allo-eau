@@ -136,8 +136,7 @@ export default async function OrderDetailAdminPage({
     .map((row) => row.companies)
     .filter((c) => c && c.status === 'active' && !excluded.has(c.id));
 
-  const client = [order.client_snapshot?.first_name, order.client_snapshot?.last_name]
-    .filter(Boolean).join(' ') || '—';
+  const clientPhone = order.client_snapshot?.phone ?? null;
   const awaiting = order.company_id === null && order.order_status === 'pending';
 
   return (
@@ -153,7 +152,7 @@ export default async function OrderDetailAdminPage({
             {order.quantity} × {order.volume_liters} L
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {client}
+            {clientPhone && <span className="font-mono">{formatGabonPhoneDisplay(clientPhone, { pretty: true })}</span>}
             {order.zones?.name && <> · {order.zones.name}</>}
             {order.zones?.sector && <> ({order.zones.sector})</>}
           </p>
