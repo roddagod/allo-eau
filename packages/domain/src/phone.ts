@@ -39,8 +39,8 @@ export function formatGabonPhoneDisplay(
   if (!local) return phone;
 
   if (pretty) {
-    // 077170462 → 07 71 70 04 62
-    return local.replace(/^(\d{2})(\d{2})(\d{2})(\d{2})(\d{1})$/, '$1 $2 $3 $4$5').trim();
+    // 077170462 → 077 17 04 62 (format Gabon : 3-2-2-2)
+    return local.replace(/^(\d{3})(\d{2})(\d{2})(\d{2})$/, '$1 $2 $3 $4').trim();
   }
   return local;
 }

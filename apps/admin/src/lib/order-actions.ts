@@ -134,6 +134,48 @@ export async function reassignOrderToDriverAction(
 }
 
 /**
+ * Modifier la priorité d'une commande (hôpital, école, incident, etc.).
+ * Justifiée par un `reason` obligatoire dès qu'on sort de 'normal'.
+ */
+export async function setOrderPriorityAction(
+  orderId: string,
+  priority: 'normal' | 'high' | 'critical',
+  reason: 'hospital' | 'school' | 'vulnerable' | 'incident' | 'ministerial' | 'other' | null,
+): Promise<ActionResult> {
+  const supabase = await createServerClient();
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+  if (!user) return { ok: false, message: 'Session expirée.' };
+
+  if (priority !== 'normal' && !reason) {
+    return { ok: false, message: 'Un motif est requis pour toute priorité supérieure à normale.' };
+  }
+
+  const { error } = await supabase
+    .from('orders')
+    .update({
+      priority,
+      priority_reason: priority === 'normal' ? null : reason,
+    } as never)
+    .eq('id', orderId);
+  if (error) return { ok: false, message: error.message };
+
+  await supabase.from('logs').insert({
+    user_id: user.id,
+    action: 'order.set_priority',
+    module: 'orders',
+    description: `Priorité passée à ${priority}${reason ? ` (${reason})` : ''}`,
+    target_id: orderId,
+    is_sensitive: true,
+  });
+
+  revalidatePath(`/commandes/${orderId}`);
+  revalidatePath('/commandes');
+  revalidatePath('/');
+  return { ok: true };
+}
+
+/**
  * Refuser une commande (déclenche le trigger de cascade côté DB).
  */
 export async function refuseOrderAction(

@@ -227,6 +227,49 @@ export async function reactivateDriverAction(driverId: string): Promise<ActionRe
   return { ok: true };
 }
 
+/**
+ * Passer un livreur en mode supervisé (ou l'inverse).
+ * Un livreur supervised ne met plus à jour ses statuts lui-même : c'est le
+ * gestionnaire de territoire attaché qui le fait à sa place.
+ */
+export async function setDriverSupervisionAction(
+  driverId: string,
+  mode: 'autonomous' | 'supervised',
+  territoryManagerId: string | null,
+): Promise<ActionResult> {
+  const supabase = await createServerClient();
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData.user;
+  if (!user) return { ok: false, message: 'Session expirée.' };
+
+  if (mode === 'supervised' && !territoryManagerId) {
+    return { ok: false, message: 'Un gestionnaire de territoire doit être désigné pour un livreur supervisé.' };
+  }
+
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from('drivers')
+    .update({
+      supervision_mode: mode,
+      territory_manager_id: mode === 'autonomous' ? null : territoryManagerId,
+    } as never)
+    .eq('id', driverId);
+  if (error) return { ok: false, message: error.message };
+
+  await admin.from('logs').insert({
+    user_id: user.id,
+    action: 'driver.set_supervision',
+    module: 'drivers',
+    description: `Mode ${mode}${territoryManagerId ? ' (gestionnaire ' + territoryManagerId.slice(0, 8) + ')' : ''}`,
+    target_id: driverId,
+    is_sensitive: true,
+  });
+
+  revalidatePath(`/livreurs/${driverId}`);
+  revalidatePath('/livreurs');
+  return { ok: true };
+}
+
 function generateTempPassword(): string {
   // 12 caractères alphanumériques sans confusion (0/O/l/1/I)
   const chars = 'abcdefghjkmnpqrstuvwxyz23456789ABCDEFGHJKMNPQRSTUVWXYZ';

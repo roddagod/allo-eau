@@ -149,7 +149,7 @@ export default async function OrdersPage({
               <thead className="bg-surface-muted text-xs uppercase tracking-widest text-ink-subtle">
                 <tr>
                   <th className="px-4 py-3">Ticket</th>
-                  <th className="px-4 py-3">MSISDN</th>
+                  <th className="px-4 py-3">Numéro</th>
                   <th className="px-4 py-3">Quartier</th>
                   <th className="px-4 py-3">Société</th>
                   <th className="px-4 py-3">Statut</th>
